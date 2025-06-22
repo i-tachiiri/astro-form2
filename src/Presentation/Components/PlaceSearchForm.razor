@@ -1,0 +1,21 @@
+@using System.ComponentModel.DataAnnotations
+<EditForm Model="this" OnValidSubmit="Submit">
+    <FluentTextField @bind-Value="Query" Placeholder="Enter place"/>
+    <FluentButton Type="submit">Search</FluentButton>
+</EditForm>
+
+@code {
+    [Parameter]
+    public EventCallback<string> OnSearch { get; set; }
+
+    [Required]
+    public string Query { get; set; } = string.Empty;
+
+    private async Task Submit()
+    {
+        if (!string.IsNullOrWhiteSpace(Query))
+        {
+            await OnSearch.InvokeAsync(Query);
+        }
+    }
+}

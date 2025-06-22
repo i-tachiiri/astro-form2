@@ -1,0 +1,29 @@
+@if (Results is not null && Results.Any())
+{
+    <FluentTable>
+        <FluentTableHead>
+            <FluentTableRow>
+                <FluentTableHeaderCell>Name</FluentTableHeaderCell>
+                <FluentTableHeaderCell>Address</FluentTableHeaderCell>
+                <FluentTableHeaderCell>Lat</FluentTableHeaderCell>
+                <FluentTableHeaderCell>Lng</FluentTableHeaderCell>
+            </FluentTableRow>
+        </FluentTableHead>
+        <FluentTableBody>
+            @foreach (var item in Results)
+            {
+                <FluentTableRow>
+                    <FluentTableCell>@item.Name</FluentTableCell>
+                    <FluentTableCell>@item.Address</FluentTableCell>
+                    <FluentTableCell>@item.Lat</FluentTableCell>
+                    <FluentTableCell>@item.Lng</FluentTableCell>
+                </FluentTableRow>
+            }
+        </FluentTableBody>
+    </FluentTable>
+}
+
+@code {
+    [Parameter]
+    public IReadOnlyList<PlaceDetails>? Results { get; set; }
+}
