@@ -59,6 +59,13 @@ secrets.json
 *.sln.iml
 
 # ========================
+
+# ========================
+# 機密設定ファイル（開発環境用）
+# ========================
+appsettings.Development.json
+client_secret.json
+
 # npm / JS 系（Blazor WASM等を拡張した場合）
 # ========================
 node_modules/
