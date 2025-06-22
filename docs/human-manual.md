@@ -1,4 +1,4 @@
-- /specification/environmwnt.yaml を参照し、bicepやその他開発環境を仕様通りに設定してください。
+- /specification/environment.yaml を参照し、bicepやその他開発環境を仕様通りに設定してください。
 - /specification/data-design.yaml を参照し、データに関する実装を行ってください。
 - /specification/api-spec.yaml を参照し、APIを実装してください。
 - /specification/ui-design.yaml を参照し、画面を実装してください。
@@ -7,7 +7,7 @@
 
 
 
-
+---
 下記を実施し、プロジェクトのひな形を作成してください。
 - docs/architectures/application-design.md を参照し、各プロジェクトとサンプル UnitTest を追加する
 - docs/development-guideline.md を参照し、Serilogや.editorconfigを設定
