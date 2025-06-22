@@ -6,5 +6,4 @@ dotnet format --verify-no-changes
 dotnet test astro-form2.sln --collect:"XPlat Code Coverage"
 coverlet ./YourTestProject/bin/Release/net8.0/YourTestProject.dll --target "dotnet" --targetargs "test ./YourTestProject/YourTestProject.csproj" --format cobertura
 ```
-
-
+- 実装上、仕様の不明瞭だった所や改善点を /docs/ai-review.md へ記載
