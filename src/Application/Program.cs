@@ -9,6 +9,7 @@ builder.ConfigureFunctionsWebApplication();
 
 builder.Services
     .AddApplicationInsightsTelemetryWorkerService()
-    .ConfigureFunctionsApplicationInsights();
+    .ConfigureFunctionsApplicationInsights()
+    .AddSingleton<Domain.Repositories.ILogRepository, Infrastructure.InMemoryLogRepository>();
 
 builder.Build().Run();
