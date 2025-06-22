@@ -1,0 +1,16 @@
+﻿<FluentNav aria-label="Main navigation">
+    <FluentNavMenu>
+        <FluentNavMenuItem href="" Match="NavLinkMatch.All">
+            Home
+        </FluentNavMenuItem>
+        <FluentNavMenuItem href="weather">
+            Weather
+        </FluentNavMenuItem>
+    </FluentNavMenu>
+</FluentNav>
+
+@code {
+    private bool collapseNavMenu = true;
+    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+    private void ToggleNavMenu() => collapseNavMenu = !collapseNavMenu;
+}

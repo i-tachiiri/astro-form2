@@ -1,0 +1,33 @@
+business_process:
+  user:
+    purpose: 自分の出生地の緯度・経度を検索したい
+    steps:
+      step1: 検索画面にアクセスする
+        api: 
+          /log/access: accessコンテナへログを保存
+          /admin/initialize: データベースの初期設定
+          /admin/seed: 旧データの削除とテストデータの追加（本番環境ではなし） 
+      step2: 出生地を検索する
+        api: 
+          /map: Places API の Autocomplete/Details を使う
+          /log/action:  actionsコンテナへログを保存
+        result: 検索結果を表示する
+        trigger: 場所を選択した時
+          api: 
+            /map/{place_id}: /map の結果に含まれるplace_idから詳細を取得する
+            /log/search_result: search_resultへログを保存
+          table:
+            columns: ["項目名", "検索結果"]
+            rows:
+              - ["住所", "東京都港区芝公園4-2-8"]
+              - ["緯度", "35.6586"]
+              - ["経度", "139.7454"]
+              - ["Googleマップ", "https://maps.google.com/..."]
+      
+
+
+
+
+
+
+

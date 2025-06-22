@@ -1,0 +1,59 @@
+environment:
+  local:
+    database: Cosmos DB Emulator
+    ru_per_sec: 1000  # ローカルでの設定の最低値
+    auto_scaling: 自動スケーリングなし（固定） 
+
+  development:
+    database: Cosmos DB
+    ru_per_sec: 1000  # ローカルでの設定の最低値
+    auto_scaling: 自動スケーリングなし（固定） 
+   
+  production:
+    database: Cosmos DB
+    ru_per_sec: 1000  # Cosmos DB Free Tierの既定値
+    auto_scaling: 自動スケーリングなし（固定）  
+
+security:
+  cryption: AES-256による暗号化対象はなし
+  RBAC: ユーザー登録を行わないので、ロールの分離もなし
+  PII: 個人情報を保有しないので、削除対応は不要
+  backup: Cosmos DBの4H単位での自動バックアップのみ
+  retention:
+    access: 90d
+    actions: 30d
+    search_result: 7d
+  audit:
+    enabled: false
+    reason: ログ用途のみで、ユーザー識別なし
+
+schemas:
+  - container: access
+    partition_key: /session_id
+    purpose: アクセス数の集計
+    document:
+      id: uuid
+      session_id: uuid
+      accessed_at: ISO 8601 format
+
+  - container: actions
+    partition_key: /session_id
+    purpose: アクセスからアクションに繋がった割合の分析
+    document:
+      id: uuid
+      session_id: uuid
+      action_name: ページ内での各アクションに設定された名前
+      actioned_at: ISO 8601 format
+
+  - container: search_result
+    partition_key: /session_id
+    purpose: 検索の分析
+    document:
+      id: uuid
+      session_id: uuid
+      place_id: Places API の Places ID
+      query: 検索キーワード
+      lat: decimal(9,6)
+      lng: decimal(9,6)
+      searched_at: ISO 8601 format
+

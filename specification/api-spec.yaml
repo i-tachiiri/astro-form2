@@ -1,0 +1,197 @@
+openapi: 3.0.3
+info:
+  version: "1.0.0"
+  title: Astro Search API
+  description: 「Astro Search」用のAPI
+
+paths:
+  /map:
+    get:
+      summary: 場所を検索する
+      description: クエリ文字列に基づき、Google Places APIを使用して候補を取得
+      parameters:
+        - name: query
+          in: query
+          description: 検索キーワード（例：東京タワー）
+          required: true
+          type: string
+      responses:
+        "200":
+          description: 検索結果
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SearchResults"
+        "400":
+          description: パラメータエラー
+
+  /map/{place_id}:
+    get:
+      summary: 場所の詳細を取得する
+      description: 指定された Place ID に対して、緯度・経度・住所などを取得
+      parameters:
+        - name: place_id
+          in: path
+          required: true
+          description: Google Places API の Place ID
+          schema:
+            type: string
+      responses:
+        "200":
+          description: 詳細情報
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PlaceDetails"
+        "404":
+          description: Place ID が見つかりません
+    /log/access:
+        post:
+            summary: アクセスログを保存する
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                    schema:
+                        type: object
+                        properties:
+                        session_id:
+                            type: string
+                        accessed_at:
+                            type: string
+                            format: date-time
+                        required:
+                        - session_id
+                        - accessed_at
+            responses:
+            "200":
+                description: 保存成功
+            "400":
+                description: パラメータエラー
+    /log/action:
+        post:
+            summary: アクションログ（検索）の記録
+            description: ユーザーがページ内で検索アクションを実行したログを記録します。
+            requestBody:
+            required: true
+            content:
+                application/json:
+                schema:
+                    type: object
+                    properties:
+                    session_id:
+                        type: string
+                        format: uuid
+                    action_name:
+                        type: string
+                        example: search
+                    actioned_at:
+                        type: string
+                        format: date-time
+                    required:
+                    - session_id
+                    - action_name
+                    - actioned_at
+            responses:
+            "200":
+                description: 保存成功
+            "400":
+                description: パラメータエラー
+    /log/search_result:
+        post:
+            summary: 検索結果ログの記録
+            description: Places API を使用した検索結果のログを記録します。
+            requestBody:
+            required: true
+            content:
+                application/json:
+                schema:
+                    type: object
+                    properties:
+                    session_id:
+                        type: string
+                        format: uuid
+                    place_id:
+                        type: string
+                        description: Google Places API の Places ID
+                    query:
+                        type: string
+                        description: ユーザーが入力した検索キーワード
+                    lat:
+                        type: number
+                        format: double
+                        example: 35.6586
+                    lng:
+                        type: number
+                        format: double
+                        example: 139.7454
+                    searched_at:
+                        type: string
+                        format: date-time
+                    required:
+                    - session_id
+                    - place_id
+                    - query
+                    - lat
+                    - lng
+                    - searched_at
+            responses:
+            "200":
+                description: 保存成功
+            "400":
+                description: パラメータエラー
+  /admin/initialize:
+    post:
+      summary: Cosmos DB の初期化
+      description: Cosmos DB のデータベースとコンテナ（access, actions, search_result）を作成します（存在しない場合のみ）。主にローカル・開発環境向け。
+      responses:
+        "200":
+          description: 初期化成功
+        "500":
+          description: 初期化処理でエラーが発生
+
+  /admin/seed:
+    post:
+      summary: テストデータの投入(本番環境では無効)
+      description: Cosmos DB にローカル用のテストデータ（access, actions, search_result 各コンテナ）を投入します。
+      responses:
+        "200":
+          description: データ投入成功
+        "500":
+          description: テストデータ投入に失敗
+
+components:
+  schemas:
+    SearchResults:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            type: object
+            properties:
+              place_id:
+                type: string
+              name:
+                type: string
+              description:
+                type: string
+
+    PlaceDetails:
+      type: object
+      properties:
+        place_id:
+          type: string
+        name:
+          type: string
+        address:
+          type: string
+        lat:
+          type: number
+          format: float
+        lng:
+          type: number
+          format: float
+        map_url:
+          type: string
+

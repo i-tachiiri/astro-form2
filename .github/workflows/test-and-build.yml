@@ -1,0 +1,44 @@
+name: Test and Build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 8
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Check code format
+        run: dotnet format --verify-no-changes
+
+      - name: Build
+        run: dotnet build --configuration Release
+
+      - name: Test with coverage
+        run: dotnet test --collect:"XPlat Code Coverage"
+
+      - name: Evaluate coverage (coverlet)
+        run: |
+          dotnet tool install --global coverlet.console
+          coverlet ./src/Infrastructure/bin/Release/net8.0/Infrastructure.dll --target "dotnet" --targetargs "test --no-build --configuration Release" --threshold 70
+
+      - name: Check for Console.WriteLine usage
+        run: |
+          if grep -r 'Console.WriteLine' src/; then
+            echo 'Console.WriteLine usage found. Please use Serilog.'
+            exit 1
+          fi
+        shell: bash
+
+      - name: Check .editorconfig compliance
+        run: dotnet format --verify-no-changes 

@@ -1,0 +1,75 @@
+bicep_directory:
+  infra:
+    main.bicap: 主要テンプレート（module 呼び出し形式）
+    modules:
+      swa.bicep: Static Web Apps
+      function.bicep: Azure Functions
+      keyvault.bicep: Key Vault
+      cosmos.bicep: Cosmos DB
+    parameters:
+      dev.json: 開発環境用パラメータ
+      prod.json: 本番環境用パラメータ
+local:
+  paths:
+    parameter: `infra/parameters/local.json`  
+    resource_group: なし  # Azure側のリソースは使わない
+    resource_prefix: なし  # 実リソースを作らないため不要
+    ci_trigger: なし  # CI/CD対象外（手動起動のみ）
+    github_secrets: なし  # ローカル実行のため不要
+  resources:
+    front:
+      name: Static Web Frontend (ローカルサーバーで動作)
+      plan: ローカル環境で `npm run dev` や `dotnet run`
+    backend:
+      name: Azure Functions (Core Tools)
+      plan: `func start` でローカル起動
+    secret:
+      name: .env.local
+      plan: `.env` ファイルや Secrets.json で代替
+    database:
+      name: Cosmos DB Emulator
+      plan: ローカルで `Cosmos DB Emulator` を利用
+develop:
+  paths: 
+    parameter: `infra/parameters/dev.json`
+    resource_group: `rg-demo-app-dev`
+    resource_prefix: `-dev`  
+    ci_trigger: develop and feature/**
+    github_secrets: `AZURE_CREDENTIALS_DEV`
+  resources: 
+      front: 
+        name: Azure Static Web Apps
+        plan: Freeプラン
+      backend:
+        name: Azure Functions
+        plan: Consumption Plan
+      secret: 
+        name: Azure Key Vault
+        plan: Freeプラン
+      database: 
+        name: Cosmos DB
+        plan: Free Tier
+production:
+  paths: 
+    parameter: `infra/parameters/prod.json`
+    resource_group: `rg-demo-app-prod`
+    resource_prefix: `-prod`  
+    ci_trigger: main
+    github_secrets: `AZURE_CREDENTIALS_PROD`
+  resources:
+    front: 
+      name: Azure Static Web Apps
+      plan: Freeプラン
+    backend:
+      name: Azure Functions
+      plan: Consumption Plan
+    secret: 
+      name: Azure Key Vault
+      plan: Freeプラン
+    database: 
+      name: Cosmos DB
+      plan: Free Tier
+
+
+
+

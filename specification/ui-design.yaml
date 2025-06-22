@@ -1,0 +1,26 @@
+design:
+  color: Fluent UI のデフォルトテーマ(ライトモード)
+  font_family: Segoe UI
+  font_scale: 12px〜20px(Fluent Design に基づく)
+  icon: Fluent UI アイコン (@fluentui/react-icons)
+  motion:
+    usage: 最小限
+    types: fade, slide
+    source: Motion API を使用
+  accessibility:
+    standard: WCAG 2.1 AA に準拠
+    keyboard_navigation: キーボード操作に完全対応
+  responsive:
+    breakpoints: [480px, 768px, 1024px]
+    layout:
+      mobile: 1カラム(シングルカラム表示)
+      tablet: 1.5カラム(サイドナビを折りたたみ可能)
+      desktop: 2ペイン(サイドナビ固定 + メインコンテンツ)
+
+screen: 画面ごとの設定を記載します。
+  search: 検索画面です。
+    purpose: 場所を指定して緯度・経度などを検索・表示する
+    components:
+      - Header: ページタイトルを表示するヘッダー
+      - PlaceSearchForm: Places API(Autocomplete + Details)を使った検索フォーム
+      - ResultTable: 検索結果（住所、緯度、経度など)を表示するテーブル

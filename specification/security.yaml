@@ -1,0 +1,23 @@
+authorization: none  
+encryption: none    
+transport_security:
+  protocol: HTTPS
+  tls_version: TLS 1.2
+
+session_control: none  # セッション単位の識別はしているが、制御なし
+
+vulnerabilities:
+  html_injection: not applicable
+  js_injection: not applicable
+  csrf: not applicable  # フォーム投稿やセッションがないので脅威なし
+
+audit:
+  exception_logging: enabled
+  destination: Azure Application Insights
+  alerting: none
+
+privacy_policy: not required  # 個人情報を保持しないため
+personal_data_deletion: not required  # 個人情報を保持しないため
+secret_key: 
+  develop: local.setting.json に記載
+  production: Azure Key Vault の DefaultAzureCredential を利用

@@ -1,0 +1,67 @@
+# ========================
+# .NET ビルド成果物
+# ========================
+bin/
+obj/
+*.dll
+*.exe
+*.pdb
+*.app/
+
+# ========================
+# Visual Studio / VSCode
+# ========================
+.vscode/
+*.user
+*.suo
+
+# ========================
+# Mac / Windows / Linux OS由来
+# ========================
+.DS_Store
+Thumbs.db
+ehthumbs.db
+desktop.ini
+
+# ========================
+# パッケージ・一時ファイル
+# ========================
+packages/
+packages-microsoft-prod.deb
+*.nupkg
+*.tar.gz
+*.zip
+
+# ========================
+# Azure Functions 実行構成
+# ========================
+local.settings.json
+
+# ========================
+# テスト出力
+# ========================
+TestResults/
+coverage*.json
+coverage*.xml
+*.trx
+*.coverage
+*.log
+
+# ========================
+# dotnet user secrets（開発環境限定）
+# ========================
+secrets.json
+
+# ========================
+# Rider / JetBrains 系（必要に応じて）
+# ========================
+.idea/
+*.sln.iml
+
+# ========================
+# npm / JS 系（Blazor WASM等を拡張した場合）
+# ========================
+node_modules/
+dist/
+.env
+.env.*

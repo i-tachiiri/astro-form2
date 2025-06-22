@@ -1,0 +1,29 @@
+[
+  {
+    "id": "a9e2134e-117e-40f9-82a1-2b4f4bf3c77d",
+    "session_id": "c4a0efdd-92e3-4a90-9b8d-72f4624b9c11",
+    "place_id": "ChIJd_Y0eVIvkIARuQyDN0F1LBA",
+    "query": "coffee shop shibuya",
+    "lat": 35.6595,
+    "lng": 139.7004,
+    "searched_at": "2025-06-23T11:02:45Z"
+  },
+  {
+    "id": "5c3c57f8-6afb-4f29-95d3-7dbb228af566",
+    "session_id": "c4a0efdd-92e3-4a90-9b8d-72f4624b9c11",
+    "place_id": "ChIJgTwKgJcpQjQR4ZyO9s_0Gw8",
+    "query": "vegan bakery",
+    "lat": 35.6660,
+    "lng": 139.7138,
+    "searched_at": "2025-06-23T11:03:57Z"
+  },
+  {
+    "id": "3e730b11-4383-47f4-8560-a5d2198ddf30",
+    "session_id": "fb5409ef-b9d5-4e48-a9ad-5b7c3d3c0e61",
+    "place_id": "ChIJR4S9m3uLGGAR9uImxN1X0p0",
+    "query": "quiet coworking space",
+    "lat": 35.6812,
+    "lng": 139.7671,
+    "searched_at": "2025-06-23T11:05:18Z"
+  }
+]
