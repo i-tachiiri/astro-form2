@@ -37,4 +37,6 @@ builder.Services.AddSingleton<ILogRepository>(_ =>
         Environment.GetEnvironmentVariable("COSMOS_CONNECTION") ?? string.Empty,
         Environment.GetEnvironmentVariable("COSMOS_DATABASE") ?? "astro-db"));
 
+builder.Services.AddSingleton<Application.Services.BirthplaceSearchService>();
+
 builder.Build().Run();

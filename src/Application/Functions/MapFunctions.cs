@@ -1,25 +1,22 @@
 using System.Net;
-using System.Text.Json;
-using System.Collections.Generic;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.WebUtilities;
 using Shared;
+using Application.Services;
 
 namespace Application.Functions;
 
 public class MapFunctions
 {
-    private readonly HttpClient _httpClient;
+    private readonly BirthplaceSearchService _service;
     private readonly ILogger _logger;
-    private readonly string _apiKey;
 
-    public MapFunctions(HttpClient httpClient, ILoggerFactory loggerFactory)
+    public MapFunctions(BirthplaceSearchService service, ILoggerFactory loggerFactory)
     {
-        _httpClient = httpClient;
+        _service = service;
         _logger = loggerFactory.CreateLogger<MapFunctions>();
-        _apiKey = Environment.GetEnvironmentVariable("PLACES_API_KEY") ?? string.Empty;
     }
 
     [Function("SearchMap")]
@@ -34,28 +31,9 @@ public class MapFunctions
 
         try
         {
-            var url = $"https://maps.googleapis.com/maps/api/place/autocomplete/json?input={Uri.EscapeDataString(query)}&key={_apiKey}";
-            var httpResp = await _httpClient.GetAsync(url);
-            if (!httpResp.IsSuccessStatusCode)
-            {
-                return req.CreateResponse(HttpStatusCode.InternalServerError);
-            }
-
-            var json = await httpResp.Content.ReadAsStringAsync();
-            using var doc = JsonDocument.Parse(json);
-            var predictions = doc.RootElement.GetProperty("predictions");
-            var results = new List<SearchResultItem>();
-            foreach (var p in predictions.EnumerateArray())
-            {
-                var item = new SearchResultItem(
-                    p.GetProperty("place_id").GetString() ?? string.Empty,
-                    p.GetProperty("structured_formatting").GetProperty("main_text").GetString() ?? string.Empty,
-                    p.GetProperty("description").GetString() ?? string.Empty);
-                results.Add(item);
-            }
-
+            var results = await _service.SearchAsync(query!, string.Empty);
             var response = req.CreateResponse(HttpStatusCode.OK);
-            await response.WriteAsJsonAsync(new SearchResults(results));
+            await response.WriteAsJsonAsync(results);
             return response;
         }
         catch (Exception ex)
@@ -77,38 +55,14 @@ public class MapFunctions
 
         try
         {
-            var url = $"https://maps.googleapis.com/maps/api/place/details/json?place_id={Uri.EscapeDataString(place_id)}&key={_apiKey}";
-            var httpResp = await _httpClient.GetAsync(url);
-            if (!httpResp.IsSuccessStatusCode)
-            {
-                return req.CreateResponse(HttpStatusCode.InternalServerError);
-            }
-
-            var json = await httpResp.Content.ReadAsStringAsync();
-            using var doc = JsonDocument.Parse(json);
-            var status = doc.RootElement.GetProperty("status").GetString();
-            if (status == "NOT_FOUND")
-            {
-                return req.CreateResponse(HttpStatusCode.NotFound);
-            }
-            if (status != "OK")
-            {
-                return req.CreateResponse(HttpStatusCode.InternalServerError);
-            }
-
-            var detail = doc.RootElement.GetProperty("result");
-            var location = detail.GetProperty("geometry").GetProperty("location");
-            var resultObj = new PlaceDetails(
-                detail.GetProperty("place_id").GetString() ?? string.Empty,
-                detail.GetProperty("name").GetString() ?? string.Empty,
-                detail.GetProperty("formatted_address").GetString() ?? string.Empty,
-                location.GetProperty("lat").GetDecimal(),
-                location.GetProperty("lng").GetDecimal(),
-                detail.GetProperty("url").GetString() ?? string.Empty);
-
+            var resultObj = await _service.GetPlaceDetailsAsync(place_id, string.Empty, string.Empty);
             var response = req.CreateResponse(HttpStatusCode.OK);
             await response.WriteAsJsonAsync(resultObj);
             return response;
+        }
+        catch (KeyNotFoundException)
+        {
+            return req.CreateResponse(HttpStatusCode.NotFound);
         }
         catch (Exception ex)
         {
