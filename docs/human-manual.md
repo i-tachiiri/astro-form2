@@ -1,4 +1,8 @@
-
+- /specification/data-design.yaml を参照し、データに関する実装を行ってください。
+- /specification/api-spec.yaml を参照し、APIを実装してください。
+- /specification/ui-design.yaml を参照し、画面を実装してください。
+- /specification/use-cases.yaml を参照し、未実装の部分を実装してください。
+- /specification/security.yaml を参照し、未実装の部分を実装してください。
 
 
 
