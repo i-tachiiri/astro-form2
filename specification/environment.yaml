@@ -9,6 +9,7 @@ bicep_directory:
     parameters:
       dev.json: 開発環境用パラメータ
       prod.json: 本番環境用パラメータ
+      local.json: ローカル用パラメータ
 local:
   paths:
     parameter: `infra/parameters/local.json`  
