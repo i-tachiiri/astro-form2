@@ -12,6 +12,8 @@ ci:
   rules:
     restrict_console: Console.WriteLine は禁止し、Serilog によるロギングに統一。`CA1303` 等のルールがエラーとして扱われます
     editor_config: `.editorconfig` に違反するコードは reject されます
+UnitTest:
+  smoke_test: 起動時の例外を捕捉するようスモークテストを実装
 
 
 
