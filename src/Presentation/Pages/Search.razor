@@ -9,28 +9,31 @@
 
 @code {
     private List<PlaceDetails>? results;
+    private readonly Guid sessionId = Guid.NewGuid();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Http.PostAsJsonAsync("api/log/access", new AccessLogDto(Guid.NewGuid(), sessionId, DateTime.UtcNow));
+        await Http.PostAsync("api/admin/initialize", null);
+        await Http.PostAsync("api/admin/seed", null);
+    }
 
     private async Task HandleSearch(string query)
     {
-        try
+        await Http.PostAsJsonAsync("api/log/action", new ActionLogDto(Guid.NewGuid(), sessionId, "search", DateTime.UtcNow));
+        var search = await Http.GetFromJsonAsync<SearchResults>($"api/map?query={Uri.EscapeDataString(query)}");
+        if (search?.Results is not null)
         {
-            var search = await Http.GetFromJsonAsync<SearchResults>($"api/map?query={Uri.EscapeDataString(query)}");
-            if (search?.Results is not null)
+            results = new();
+            foreach (var item in search.Results)
             {
-                results = new();
-                foreach (var item in search.Results)
+                var detail = await Http.GetFromJsonAsync<PlaceDetails>($"api/map/{item.PlaceId}");
+                if (detail != null)
                 {
-                    var detail = await Http.GetFromJsonAsync<PlaceDetails>($"api/map/{item.PlaceId}");
-                    if (detail != null)
-                    {
-                        results.Add(detail);
-                    }
+                    results.Add(detail);
+                    await Http.PostAsJsonAsync("api/log/search_result", new SearchResultLogDto(Guid.NewGuid(), sessionId, detail.PlaceId, query, (decimal)detail.Lat, (decimal)detail.Lng, DateTime.UtcNow));
                 }
             }
-        }
-        catch (Exception ex)
-        {
-            Console.Error.WriteLine(ex);
         }
     }
 }
