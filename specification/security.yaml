@@ -21,3 +21,13 @@ personal_data_deletion: not required  # 個人情報を保持しないため
 secret_key: 
   develop: local.setting.json に記載
   production: Azure Key Vault の DefaultAzureCredential を利用
+
+apiKeys:
+  - name: Google Places API
+    usage: 外部地名検索用のAPI(textsearch, details)
+    storage:
+      local: appsettings.Development.json に保存（ローカル限定）
+      development: Azure Key Vault で保護
+      production: Azure Key Vault で保護
+    scope: Infrastructure層(PlacesClient)でのみ使用
+    rotation: 年1回を目安に定期更新
