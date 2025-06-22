@@ -1,3 +1,4 @@
+- /specification/environmwnt.yaml を参照し、bicepやその他開発環境を仕様通りに設定してください。
 - /specification/data-design.yaml を参照し、データに関する実装を行ってください。
 - /specification/api-spec.yaml を参照し、APIを実装してください。
 - /specification/ui-design.yaml を参照し、画面を実装してください。
