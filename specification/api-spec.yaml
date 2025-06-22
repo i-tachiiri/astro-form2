@@ -17,8 +17,8 @@ paths:
 
   /admin/seed:
     post:
-      summary: テストデータの投入(本番環境では無効)
-      description: Cosmos DB にローカル用のテストデータ（access, actions, search_result 各コンテナ）を投入します。
+      summary: 旧テストデータの削除と、seedのテストデータの投入。ローカルと開発環境だけで動作し、本番環境では実行されない
+      description: Cosmos DB の旧データを削除し、テストデータ（access, actions, search_result 各コンテナ）を投入します。
       responses:
         "200":
           description: データ投入成功
