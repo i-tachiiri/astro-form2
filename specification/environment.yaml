@@ -1,6 +1,6 @@
 bicep_directory:
   infra:
-    main.bicap: 主要テンプレート（module 呼び出し形式）
+    main.bicep: 主要テンプレート（module 呼び出し形式）
     modules:
       swa.bicep: Static Web Apps
       function.bicep: Azure Functions
