@@ -5,9 +5,10 @@ namespace Infrastructure;
 
 public class KeyVaultService
 {
-  public SecretClient Client { get; }
-  public KeyVaultService(string vaultUri)
-  {
-    Client = new SecretClient(new Uri(vaultUri), new DefaultAzureCredential());
-  }
+    public SecretClient Client { get; }
+
+    public KeyVaultService(string vaultUri)
+    {
+        Client = new SecretClient(new Uri(vaultUri), new DefaultAzureCredential());
+    }
 }
