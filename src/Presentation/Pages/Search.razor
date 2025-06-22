@@ -1,0 +1,36 @@
+@page "/search"
+@inject HttpClient Http
+
+<Header Title="Place Search" />
+
+<PlaceSearchForm OnSearch="HandleSearch" />
+
+<ResultTable Results="results" />
+
+@code {
+    private List<PlaceDetails>? results;
+
+    private async Task HandleSearch(string query)
+    {
+        try
+        {
+            var search = await Http.GetFromJsonAsync<SearchResults>($"api/map?query={Uri.EscapeDataString(query)}");
+            if (search?.Results is not null)
+            {
+                results = new();
+                foreach (var item in search.Results)
+                {
+                    var detail = await Http.GetFromJsonAsync<PlaceDetails>($"api/map/{item.PlaceId}");
+                    if (detail != null)
+                    {
+                        results.Add(detail);
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine(ex);
+        }
+    }
+}
