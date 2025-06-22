@@ -30,6 +30,8 @@ builder.Services
     .AddApplicationInsightsTelemetryWorkerService()
     .ConfigureFunctionsApplicationInsights();
 
+builder.Services.AddHttpClient();
+
 builder.Services.AddSingleton<ILogRepository>(_ =>
     new CosmosLogRepository(
         Environment.GetEnvironmentVariable("COSMOS_CONNECTION") ?? string.Empty,
