@@ -7,7 +7,7 @@
 - [セキュリティ](specification/security.yaml)  
 - [テスト・CI](specification/test-policy.yaml)  
 - [UIデザイン・画面](specification/ui-design.yaml)  
-- [ユースケース](specification/use-cases.yaml)  
+- [ユースケース](specification/use-cases.yaml)
 
 ---
 
@@ -33,3 +33,13 @@
 
 - [Ai Review](docs/ai-review.md) - AIペアコーディングで、AIが仕様との差異を確認し、記載する為のドキュメント
 - [マニュアル](docs/human-manual/md) - 人間向けのAI指示案
+
+## 環境設定
+
+`infra/` ディレクトリには Bicep テンプレートを配置しています。環境ごとのパラメーター ファイルは以下の通りです。
+
+- `infra/parameters/local.json` – ローカル開発向け
+- `infra/parameters/dev.json` – 開発環境向け
+- `infra/parameters/prod.json` – 本番環境向け
+
+ローカル環境では Azure リソースを作成せず、`npm run dev` や `func start` によりアプリを起動します。Cosmos DB Emulator を利用してください。
