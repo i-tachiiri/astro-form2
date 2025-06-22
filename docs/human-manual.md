@@ -4,7 +4,7 @@
 - /specification/ui-design.yaml を参照し、画面を実装してください。
 - /specification/use-cases.yaml を参照し、未実装の部分を実装してください。
 - /specification/security.yaml を参照し、未実装の部分を実装してください。
-
+---
 - /specification/environment.yaml を参照し、開発・実行・CI環境を構築してください（bicepのデプロイ構成、Azure FunctionsやBlobのエミュレータ含む）。
 - /specification/data-design.yaml を参照し、Cosmos DB 等のデータ構造を定義し、EntityやRepositoryなどのドメイン層を実装してください。
 - /specification/api-spec.yaml を参照し、Function API のエンドポイント・パラメータ・戻り値を実装してください。必要に応じてデータ層と連携してください。
