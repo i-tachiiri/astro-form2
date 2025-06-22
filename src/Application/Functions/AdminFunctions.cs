@@ -45,11 +45,26 @@ public class AdminFunctions
     {
         try
         {
+            var environment =
+                Environment.GetEnvironmentVariable("AZURE_FUNCTIONS_ENVIRONMENT") ??
+                Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ??
+                "Production";
+
+            if (environment.Equals("Production", StringComparison.OrdinalIgnoreCase))
+            {
+                _logger.LogInformation("SeedTestData is disabled in production environment.");
+                return req.CreateResponse(HttpStatusCode.Forbidden);
+            }
+
             var client = new CosmosClient(_connectionString);
             var database = client.GetDatabase(_databaseName);
             var accessContainer = database.GetContainer("access");
             var actionsContainer = database.GetContainer("actions");
             var searchContainer = database.GetContainer("search_result");
+
+            await ClearContainerAsync(accessContainer);
+            await ClearContainerAsync(actionsContainer);
+            await ClearContainerAsync(searchContainer);
 
             string seedDir = Path.Combine(Environment.CurrentDirectory, "seed");
             if (Directory.Exists(seedDir))
@@ -77,6 +92,19 @@ public class AdminFunctions
         foreach (var item in items)
         {
             await container.UpsertItemAsync(item);
+        }
+    }
+
+    private static async Task ClearContainerAsync(Container container)
+    {
+        var iterator = container.GetItemQueryIterator<dynamic>("SELECT c.id, c.session_id FROM c");
+        while (iterator.HasMoreResults)
+        {
+            var response = await iterator.ReadNextAsync();
+            foreach (var item in response)
+            {
+                await container.DeleteItemAsync<dynamic>((string)item.id, new PartitionKey((string)item.session_id));
+            }
         }
     }
 }
