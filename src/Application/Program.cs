@@ -4,6 +4,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.IO;
+using Domain.Repositories;
+using Infrastructure;
 
 var builder = FunctionsApplication.CreateBuilder(args);
 
@@ -27,5 +29,10 @@ if (string.Equals(environment, "Development", StringComparison.OrdinalIgnoreCase
 builder.Services
     .AddApplicationInsightsTelemetryWorkerService()
     .ConfigureFunctionsApplicationInsights();
+
+builder.Services.AddSingleton<ILogRepository>(_ =>
+    new CosmosLogRepository(
+        Environment.GetEnvironmentVariable("COSMOS_CONNECTION") ?? string.Empty,
+        Environment.GetEnvironmentVariable("COSMOS_DATABASE") ?? "astro-db"));
 
 builder.Build().Run();
