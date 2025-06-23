@@ -1,5 +1,6 @@
-- 仕様と指示が相反する場合、実装を行わずに、差異を /docs/ai-review.md へ記載
-- PR作成前に下記を実施し、テストが通ればPRを作成。通らなければ通るように修正
+- 仕様と指示が相反する場合、差異を /docs/ai-review.md へ記載
+- PR作成前に下記を実施し、テストが通ればPRを作成
+  - カバレッジが足りなければテストを実装する
 ```
 dotnet build astro-form2.sln -c Release
 dotnet format --verify-no-changes
