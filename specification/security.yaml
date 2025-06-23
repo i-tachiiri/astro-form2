@@ -19,11 +19,7 @@ audit:
 privacy_policy: not required  # 個人情報を保持しないため
 personal_data_deletion: not required  # 個人情報を保持しないため
 secret_key: 
-  develop: local.setting.json に記載
-  production: Azure Key Vault の DefaultAzureCredential を利用
-
-apiKeys:
-  - name: Google Places API
+  google_places_api:
     variable: GooglePlacesApiKey
     usage: 外部地名検索用のAPI(textsearch, details)
     storage:
@@ -31,4 +27,11 @@ apiKeys:
       development: Azure Key Vault で保護
       production: Azure Key Vault で保護
     scope: Infrastructure層(PlacesClient)でのみ使用
-    rotation: 年1回を目安に定期更新
+  cosmos_db_connection_string:
+    variable: CosmosDbConnection
+    usage: Cosmos DBへの接続文字列
+    storage:
+      local: local.setting.json に保存（ローカル限定）
+      development: Azure Key Vault で保護
+      production: Azure Key Vault で保護      
+    scope: Infrastructure層(PlacesClient)でのみ使用
