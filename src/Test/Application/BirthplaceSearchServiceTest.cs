@@ -54,4 +54,55 @@ public class BirthplaceSearchServiceTest
         Assert.Single(repo.SearchLogs);
         Assert.Equal("1", detail.PlaceId);
     }
+
+    [Fact]
+    public async Task SearchAsync_Throws_On_EmptyQuery()
+    {
+        var repo = new FakeLogRepository();
+        var client = new HttpClient(new FakeHttpHandler(_ => new HttpResponseMessage(HttpStatusCode.OK)));
+        var service = new BirthplaceSearchService(client, repo, NullLogger<BirthplaceSearchService>.Instance);
+        await Assert.ThrowsAsync<ArgumentException>(() => service.SearchAsync("", "sid"));
+    }
+
+    [Fact]
+    public async Task SearchAsync_NoLog_When_SessionIdEmpty()
+    {
+        var handler = new FakeHttpHandler(_ => new HttpResponseMessage(HttpStatusCode.OK)
+        {
+            Content = new StringContent("{\"predictions\":[]}")
+        });
+        var repo = new FakeLogRepository();
+        var client = new HttpClient(handler);
+        var service = new BirthplaceSearchService(client, repo, NullLogger<BirthplaceSearchService>.Instance);
+        await service.SearchAsync("tokyo", string.Empty);
+        Assert.Empty(repo.ActionLogs);
+    }
+
+    [Fact]
+    public async Task GetPlaceDetailsAsync_Throws_When_NotFound()
+    {
+        var json = "{\"status\":\"NOT_FOUND\"}";
+        var handler = new FakeHttpHandler(_ => new HttpResponseMessage(HttpStatusCode.OK)
+        {
+            Content = new StringContent(json)
+        });
+        var repo = new FakeLogRepository();
+        var client = new HttpClient(handler);
+        var service = new BirthplaceSearchService(client, repo, NullLogger<BirthplaceSearchService>.Instance);
+        await Assert.ThrowsAsync<KeyNotFoundException>(() => service.GetPlaceDetailsAsync("1", "tokyo", "sid"));
+    }
+
+    [Fact]
+    public async Task GetPlaceDetailsAsync_Throws_When_ErrorStatus()
+    {
+        var json = "{\"status\":\"ERROR\"}";
+        var handler = new FakeHttpHandler(_ => new HttpResponseMessage(HttpStatusCode.OK)
+        {
+            Content = new StringContent(json)
+        });
+        var repo = new FakeLogRepository();
+        var client = new HttpClient(handler);
+        var service = new BirthplaceSearchService(client, repo, NullLogger<BirthplaceSearchService>.Instance);
+        await Assert.ThrowsAsync<InvalidOperationException>(() => service.GetPlaceDetailsAsync("1", "tokyo", "sid"));
+    }
 }
