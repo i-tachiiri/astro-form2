@@ -1,6 +1,6 @@
 bicep_directory:
   infra:
-    main.bicap: 主要テンプレート（module 呼び出し形式）
+    main.bicep: 主要テンプレート（module 呼び出し形式）
     modules:
       swa.bicep: Static Web Apps
       function.bicep: Azure Functions
@@ -9,6 +9,7 @@ bicep_directory:
     parameters:
       dev.json: 開発環境用パラメータ
       prod.json: 本番環境用パラメータ
+      local.json: ローカル用パラメータ
 local:
   paths:
     parameter: `infra/parameters/local.json`  
