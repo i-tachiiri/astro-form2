@@ -26,7 +26,7 @@ apiKeys:
   - name: Google Places API
     usage: 外部地名検索用のAPI(textsearch, details)
     storage:
-      local: appsettings.Development.json に保存（ローカル限定）
+      local: local.setting.json に保存（ローカル限定）
       development: Azure Key Vault で保護
       production: Azure Key Vault で保護
     scope: Infrastructure層(PlacesClient)でのみ使用
