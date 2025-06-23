@@ -4,6 +4,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.IO;
+using Domain.Repositories;
+using Infrastructure;
 
 var builder = FunctionsApplication.CreateBuilder(args);
 
@@ -14,8 +16,8 @@ if (string.Equals(environment, "Development", StringComparison.OrdinalIgnoreCase
 {
     try
     {
-        var sourcePath = Path.Combine("..", "..", "#config", "appsettings.Development.json");
-        var destPath = Path.Combine(Environment.CurrentDirectory, "appsettings.Development.json");
+        var sourcePath = Path.Combine("..", "..", "#config", "local.settings.json");
+        var destPath = Path.Combine(Environment.CurrentDirectory, "local.settings.json");
         File.Copy(sourcePath, destPath, true);
     }
     catch (Exception ex)
@@ -27,5 +29,14 @@ if (string.Equals(environment, "Development", StringComparison.OrdinalIgnoreCase
 builder.Services
     .AddApplicationInsightsTelemetryWorkerService()
     .ConfigureFunctionsApplicationInsights();
+
+builder.Services.AddHttpClient();
+
+builder.Services.AddSingleton<ILogRepository>(_ =>
+    new CosmosLogRepository(
+        Environment.GetEnvironmentVariable("CosmosDbConnection") ?? string.Empty,
+        Environment.GetEnvironmentVariable("COSMOS_DATABASE") ?? "astro-db"));
+
+builder.Services.AddSingleton<Application.Services.BirthplaceSearchService>();
 
 builder.Build().Run();

@@ -33,3 +33,20 @@
 
 - [Ai Review](docs/ai-review.md) - AIペアコーディングで、AIが仕様との差異を確認し、記載する為のドキュメント
 - [マニュアル](docs/human-manual/md) - 人間向けのAI指示案
+
+## 開発環境のセットアップ
+
+`specification/environment.yaml` の内容に合わせ、Bicep テンプレートとパラメータ
+ファイルを `infra/` 配下に配置しています。
+
+- `infra/main.bicap` – module 形式で各サービスを展開するメインテンプレート
+- `infra/modules/` – Static Web Apps、Functions、Key Vault、Cosmos DB 用モジュール
+- `infra/parameters/local.json` – ローカル開発用パラメータ
+- `infra/parameters/dev.json` – 開発環境用パラメータ
+- `infra/parameters/prod.json` – 本番環境用パラメータ
+
+ローカル環境では Azure リソースを作成せず、`npm run dev` や `func start` でアプリを
+起動し、データベースには Cosmos DB Emulator を利用します。
+
+`local.settings.sample.json` を `local.settings.json` にコピーし、
+`GooglePlacesApiKey` と `CosmosDbConnection` を設定してから実行してください。

@@ -1,0 +1,17 @@
+@page "/search"
+
+<Header />
+
+<PlaceSearchForm OnSelected="HandleSelected" />
+
+<PlaceSearchResult Result="_result" />
+
+@code {
+    private PlaceDetails? _result;
+
+    private Task HandleSelected(PlaceDetails detail)
+    {
+        _result = detail;
+        return Task.CompletedTask;
+    }
+}
