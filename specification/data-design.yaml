@@ -19,12 +19,6 @@ security:
   RBAC: ユーザー登録を行わないので、ロールの分離もなし
   PII: 個人情報を保有しないので、削除対応は不要
   backup: Cosmos DBの4H単位での自動バックアップのみ
-  connection_string:
-    variable: CosmosDbConnection
-    setting:
-      local: local.settings.json
-      develop: Azure Key Vault
-      production: Azure Key Vault
   retention:
     access: 90d
     actions: 30d
