@@ -1,0 +1,30 @@
+@page "/search"
+
+<SearchHeader Title="検索" />
+
+<PlaceSearchForm OnSearch="HandleSearch" />
+
+<ResultTable Results="_results" />
+
+@code {
+    [Inject]
+    private HttpClient Http { get; set; } = default!;
+
+    private List<PlaceDetails>? _results;
+
+    private async Task HandleSearch(string query)
+    {
+        var search = await Http.GetFromJsonAsync<SearchResults>($"api/map?query={Uri.EscapeDataString(query)}");
+        if (search?.Results is null) return;
+        var list = new List<PlaceDetails>();
+        foreach (var item in search.Results)
+        {
+            var detail = await Http.GetFromJsonAsync<PlaceDetails>($"api/map/{item.PlaceId}");
+            if (detail is not null)
+            {
+                list.Add(detail);
+            }
+        }
+        _results = list;
+    }
+}
