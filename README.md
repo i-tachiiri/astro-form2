@@ -1,7 +1,6 @@
 ## 仕様書
 
-- [API仕様書](specification/api-spec.yaml)  
-- [システム構成](specification/architecture.yaml)  
+- [API仕様書](specification/api.yaml)  
 - [データ構造](specification/data-design.yaml)  
 - [システム環境](specification/environment.yaml)  
 - [セキュリティ](specification/security.yaml)  
