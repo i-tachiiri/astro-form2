@@ -23,7 +23,7 @@ secret_key:
     variable: GooglePlacesApiKey
     usage: 外部地名検索用のAPI(textsearch, details)
     storage:
-      local: local.setting.json に保存（ローカル限定）
+      local: '/config/local.setting.json' に保存（ローカル限定）
       development: Azure Key Vault で保護
       production: Azure Key Vault で保護
     scope: Infrastructure層(PlacesClient)でのみ使用
@@ -31,7 +31,7 @@ secret_key:
     variable: CosmosDbConnection
     usage: Cosmos DBへの接続文字列
     storage:
-      local: local.setting.json に保存（ローカル限定）
+      local: '/config/local.setting.json' に保存（ローカル限定）
       development: Azure Key Vault で保護
       production: Azure Key Vault で保護      
     scope: Infrastructure層(PlacesClient)でのみ使用
