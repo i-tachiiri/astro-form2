@@ -1,0 +1,43 @@
+@inject HttpClient Http
+
+<FluentTextField @bind-Value="_query" Placeholder="Search place" OnInput="LoadSuggestions" Style="width: 300px" />
+@if (_suggestions?.Count > 0)
+{
+    <ul class="suggestions">
+        @foreach (var item in _suggestions)
+        {
+            <li @onclick="() => Select(item)">@item.Description</li>
+        }
+    </ul>
+}
+
+@code {
+    [Parameter]
+    public EventCallback<PlaceDetails> OnSelected { get; set; }
+
+    private string _query = string.Empty;
+    private List<SearchResultItem>? _suggestions;
+
+    private async Task LoadSuggestions(ChangeEventArgs e)
+    {
+        _query = e.Value?.ToString() ?? string.Empty;
+        if (string.IsNullOrWhiteSpace(_query))
+        {
+            _suggestions = null;
+            return;
+        }
+        var result = await Http.GetFromJsonAsync<SearchResults>($"api/map?query={Uri.EscapeDataString(_query)}");
+        _suggestions = result?.Results.ToList();
+    }
+
+    private async Task Select(SearchResultItem item)
+    {
+        _query = item.Description;
+        _suggestions = null;
+        var detail = await Http.GetFromJsonAsync<PlaceDetails>($"api/map/{item.PlaceId}");
+        if (detail != null && OnSelected.HasDelegate)
+        {
+            await OnSelected.InvokeAsync(detail);
+        }
+    }
+}
