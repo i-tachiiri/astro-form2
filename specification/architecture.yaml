@@ -1,7 +1,0 @@
-
-Presentation:
-  Client: Blazor WebAssembly による UI
-  Shared: クライアント・API間の DTO
-Application: Azure Functions ベースの API（Controller 相当）
-Domain: 業務ロジック（Entity・値オブジェクト・サービス）
-Infrastructure: Cosmos DB や Blob Storage との接続処理
