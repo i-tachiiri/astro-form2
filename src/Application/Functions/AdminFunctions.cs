@@ -21,7 +21,7 @@ public class AdminFunctions
     }
 
     [Function("InitializeDatabase")]
-    public async Task<HttpResponseData> InitializeDatabase([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "admin/initialize")] HttpRequestData req)
+    public async Task<HttpResponseData> InitializeDatabase([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "test-data/initialize")] HttpRequestData req)
     {
         try
         {
@@ -41,7 +41,7 @@ public class AdminFunctions
     }
 
     [Function("SeedTestData")]
-    public async Task<HttpResponseData> SeedTestData([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "admin/seed")] HttpRequestData req)
+    public async Task<HttpResponseData> SeedTestData([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "test-data/seed")] HttpRequestData req)
     {
         try
         {
