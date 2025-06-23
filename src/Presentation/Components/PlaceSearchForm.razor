@@ -1,6 +1,6 @@
 @inject HttpClient Http
 
-<FluentTextField @bind-Value="_query" Placeholder="Search place" OnInput="LoadSuggestions" Style="width: 300px" />
+<FluentTextField @bind-Value="_query" Placeholder="Search place" @oninput="LoadSuggestions" Style="width: 300px" />
 @if (_suggestions?.Count > 0)
 {
     <ul class="suggestions">
