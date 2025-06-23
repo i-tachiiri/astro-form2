@@ -140,7 +140,7 @@ paths:
                 description: 保存成功
             "400":
                 description: パラメータエラー
-  /admin/initialize:
+  /test-data/initialize:
     post:
       summary: Cosmos DB の初期化
       description: Cosmos DB のデータベースとコンテナ（access, actions, search_result）を作成します（存在しない場合のみ）。主にローカル・開発環境向け。
@@ -150,7 +150,7 @@ paths:
         "500":
           description: 初期化処理でエラーが発生
 
-  /admin/seed:
+  /test-data/seed:
     post:
       summary: テストデータの投入(本番環境では無効)
       description: Cosmos DB にローカル用のテストデータ（access, actions, search_result 各コンテナ）を投入します。
