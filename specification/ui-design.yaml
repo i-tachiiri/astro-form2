@@ -20,7 +20,11 @@ design:
 screen: 画面ごとの設定を記載します。
   search: 検索画面です。
     purpose: 場所を指定して緯度・経度などを検索・表示する
-    components:
-      - Header: ページタイトルを表示するヘッダー
-      - PlaceSearchForm: Places API(Autocomplete + Details)を使った検索フォーム
-      - ResultTable: 検索結果（住所、緯度、経度など)を表示するテーブル
+    components: [AppShell, header, place_search_form,place_search_result]
+
+component: 
+  AppShell: 全画面で共通するレイアウト枠。ヘッダーや余白、ページ全体の構造を提供する
+  header: ページのタイトル(Astro Search)を表示するヘッダー
+  place_search_form: テキストの入力フォーム。Places APIのAutocompleteで候補を提示し、選択時にDetailsのデータを取得。place_search_resultへ結果を表示する
+  place_search_result: DataGridで[["項目名", "検索結果"],["住所", 住所全体],["緯度", 緯度の数値],["経度",経度の数値],["Googleマップ", Googleマップ上のURL]]を表示する
+  
