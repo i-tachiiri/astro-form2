@@ -1,8 +1,10 @@
+using System;
 using System.Text.Json;
 using Domain.Models;
 using Domain.Repositories;
 using Microsoft.Extensions.Logging;
 using Shared;
+using Infrastructure;
 
 namespace Application.Services;
 
@@ -13,12 +15,23 @@ public class BirthplaceSearchService
     private readonly ILogger<BirthplaceSearchService> _logger;
     private readonly string _apiKey;
 
-    public BirthplaceSearchService(HttpClient httpClient, ILogRepository logRepository, ILogger<BirthplaceSearchService> logger)
+    public BirthplaceSearchService(HttpClient httpClient, ILogRepository logRepository, ILogger<BirthplaceSearchService> logger, KeyVaultService? keyVaultService = null)
     {
         _httpClient = httpClient;
         _logRepository = logRepository;
         _logger = logger;
         _apiKey = Environment.GetEnvironmentVariable("PLACES_API_KEY") ?? string.Empty;
+        if (string.IsNullOrEmpty(_apiKey) && keyVaultService != null)
+        {
+            try
+            {
+                _apiKey = keyVaultService.GetSecret("PLACES_API_KEY") ?? string.Empty;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to retrieve PLACES_API_KEY from Key Vault");
+            }
+        }
     }
 
     public async Task<SearchResults> SearchAsync(string query, string sessionId)
