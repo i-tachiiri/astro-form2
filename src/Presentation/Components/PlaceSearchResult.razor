@@ -1,0 +1,22 @@
+@if (Result is not null)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>項目名</th>
+                <th>検索結果</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>住所</td><td>@Result.Address</td></tr>
+            <tr><td>緯度</td><td>@Result.Lat</td></tr>
+            <tr><td>経度</td><td>@Result.Lng</td></tr>
+            <tr><td>Googleマップ</td><td><a href="@Result.MapUrl" target="_blank">@Result.MapUrl</a></td></tr>
+        </tbody>
+    </table>
+}
+
+@code {
+    [Parameter]
+    public PlaceDetails? Result { get; set; }
+}
