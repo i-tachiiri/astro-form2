@@ -47,3 +47,6 @@
 
 ローカル環境では Azure リソースを作成せず、`npm run dev` や `func start` でアプリを
 起動し、データベースには Cosmos DB Emulator を利用します。
+
+`local.settings.sample.json` を `local.settings.json` にコピーし、
+`GooglePlacesApiKey` と `CosmosDbConnection` を設定してから実行してください。

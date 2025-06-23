@@ -18,7 +18,7 @@ public class BirthplaceSearchService
         _httpClient = httpClient;
         _logRepository = logRepository;
         _logger = logger;
-        _apiKey = Environment.GetEnvironmentVariable("PLACES_API_KEY") ?? string.Empty;
+        _apiKey = Environment.GetEnvironmentVariable("GooglePlacesApiKey") ?? string.Empty;
     }
 
     public async Task<SearchResults> SearchAsync(string query, string sessionId)

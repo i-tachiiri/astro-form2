@@ -16,7 +16,7 @@ public class AdminFunctions
     public AdminFunctions(ILoggerFactory loggerFactory)
     {
         _logger = loggerFactory.CreateLogger<AdminFunctions>();
-        _connectionString = Environment.GetEnvironmentVariable("COSMOS_CONNECTION") ?? string.Empty;
+        _connectionString = Environment.GetEnvironmentVariable("CosmosDbConnection") ?? string.Empty;
         _databaseName = Environment.GetEnvironmentVariable("COSMOS_DATABASE") ?? "astro-db";
     }
 
