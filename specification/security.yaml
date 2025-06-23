@@ -24,6 +24,7 @@ secret_key:
 
 apiKeys:
   - name: Google Places API
+    variable: GooglePlacesApiKey
     usage: 外部地名検索用のAPI(textsearch, details)
     storage:
       local: local.setting.json に保存（ローカル限定）
