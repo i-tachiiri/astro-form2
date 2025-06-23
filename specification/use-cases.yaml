@@ -10,12 +10,14 @@ business_process:
           /admin/seed: 旧データの削除とテストデータの追加（本番環境ではなし） 
       step2: 出生地を検索する
         screen: search
+        component: place_search_form
         api: 
           /map: Places API の Autocomplete/Details を使う
           /log/action:  actionsコンテナへログを保存
         result: 検索結果を表示する
         trigger: 場所を選択した時
           screen: search
+          component: place_search_result
           api: 
             /map/{place_id}: /map の結果に含まれるplace_idから詳細を取得する
             /log/search_result: search_resultへログを保存
