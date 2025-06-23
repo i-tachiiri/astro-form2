@@ -3,16 +3,19 @@ business_process:
     purpose: 自分の出生地の緯度・経度を検索したい
     steps:
       step1: 検索画面にアクセスする
+        screen: search
         api: 
           /log/access: accessコンテナへログを保存
           /admin/initialize: データベースの初期設定
           /admin/seed: 旧データの削除とテストデータの追加（本番環境ではなし） 
       step2: 出生地を検索する
+        screen: search
         api: 
           /map: Places API の Autocomplete/Details を使う
           /log/action:  actionsコンテナへログを保存
         result: 検索結果を表示する
         trigger: 場所を選択した時
+          screen: search
           api: 
             /map/{place_id}: /map の結果に含まれるplace_idから詳細を取得する
             /log/search_result: search_resultへログを保存
