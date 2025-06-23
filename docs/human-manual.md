@@ -1,16 +1,10 @@
 - /specification/environment.yaml を参照し、bicepやその他開発環境を仕様通りに設定してください。
 - /specification/data-design.yaml を参照し、データに関する実装を行ってください。
 - /specification/api-spec.yaml を参照し、APIを実装してください。
-- /specification/ui-design.yaml を参照し、画面を実装してください。
 - /specification/use-cases.yaml を参照し、未実装の部分を実装してください。
 - /specification/security.yaml を参照し、未実装の部分を実装してください。
----
-- /specification/environment.yaml を参照し、開発・実行・CI環境を構築してください（bicepのデプロイ構成、Azure FunctionsやBlobのエミュレータ含む）。
-- /specification/data-design.yaml を参照し、Cosmos DB 等のデータ構造を定義し、EntityやRepositoryなどのドメイン層を実装してください。
-- /specification/api-spec.yaml を参照し、Function API のエンドポイント・パラメータ・戻り値を実装してください。必要に応じてデータ層と連携してください。
-- /specification/use-cases.yaml を参照し、ユースケースに沿って Application層のロジックを実装してください。APIやドメイン層との連携が必要です。
-- /specification/security.yaml を参照し、Key Vault や RBAC などセキュリティの仕様に従って、未実装の認証・認可・暗号化処理を補完してください。
-- /specification/ui-design.yaml を参照し、フロントエンド（Blazor WASM等）を実装してください。APIとの接続を確認し、データバインディングを行ってください。
+- /specification/ui-design.yaml を参照し、画面を実装してください。
+
 
 
 
