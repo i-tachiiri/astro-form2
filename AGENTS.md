@@ -5,18 +5,25 @@ dotnet build astro-form2.sln -c Release
 dotnet format --verify-no-changes
 dotnet test astro-form2.sln --collect:"XPlat Code Coverage"
 
-# アプリケーション層
+# アプリケーション層（70%以上必要）
 coverlet ./src/Test/Application/bin/Release/net8.0/Application.Test.dll \
   --target "dotnet" \
   --targetargs "test ./src/Test/Application/Application.Test.csproj -c Release" \
   --format cobertura \
-  --output ./TestResults/coverage-application.xml
+  --output ./TestResults/coverage-application.xml \
+  --threshold 70 \
+  --threshold-type line \
+  --threshold-stat total
 
-# ドメイン層
+# ドメイン層（70%以上必要）
 coverlet ./src/Test/Domain/bin/Release/net8.0/Domain.Test.dll \
   --target "dotnet" \
   --targetargs "test ./src/Test/Domain/Domain.Test.csproj -c Release" \
   --format cobertura \
-  --output ./TestResults/coverage-domain.xml
+  --output ./TestResults/coverage-domain.xml \
+  --threshold 70 \
+  --threshold-type line \
+  --threshold-stat total
+
 ```
 - 実装上、仕様の不明瞭だった所や改善点を /docs/ai-review.md へ記載
