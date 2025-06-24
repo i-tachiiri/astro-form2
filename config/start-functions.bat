@@ -15,6 +15,8 @@ copy /Y "%SCRIPT_DIR%local.settings.json" "%APP_DIR%\local.settings.json"
 xcopy /E /Y /I "%SCRIPT_DIR%seed" "%APP_DIR%\seed"
 xcopy /E /Y /I "%SCRIPT_DIR%seed" "%BIN_RELEASE%\seed"
 copy /Y "%SCRIPT_DIR%local.settings.json" "%BIN_RELEASE%\local.settings.json"
+copy /Y "%SCRIPT_DIR%local.settings.json" "%FUNC_OUT%\local.settings.json"
+
 
 :: swa コマンドの存在確認
 where swa >nul 2>nul
