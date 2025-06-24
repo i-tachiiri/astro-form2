@@ -20,13 +20,13 @@ local:
   resources:
     front:
       name: Static Web Frontend (ローカルサーバーで動作)
-      plan: ローカル環境で `npm run dev` や `dotnet run`
+      plan: ローカル環境で /config/start-functions.bat から起動
     backend:
       name: Azure Functions (Core Tools)
-      plan: `func start` でローカル起動
+      plan: ローカル環境で /config/start-functions.bat から起動
     secret:
-      name: .env.local
-      plan: `.env` ファイルや Secrets.json で代替
+      name: local.settings.json
+      plan: local.settings.json で代替
     database:
       name: Cosmos DB Emulator
       plan: ローカルで `Cosmos DB Emulator` を利用
