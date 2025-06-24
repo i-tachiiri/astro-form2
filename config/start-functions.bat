@@ -16,6 +16,19 @@ xcopy /E /Y /I "%SCRIPT_DIR%seed" "%APP_DIR%\seed"
 xcopy /E /Y /I "%SCRIPT_DIR%seed" "%BIN_RELEASE%\seed"
 copy /Y "%SCRIPT_DIR%local.settings.json" "%BIN_RELEASE%\local.settings.json"
 
+:: swa コマンドの存在確認
+where swa >nul 2>nul
+if errorlevel 1 (
+    echo [INFO] swa CLI が見つかりません。npm でインストールを試みます...
+    npm install -g @azure/static-web-apps-cli
+    if errorlevel 1 (
+        echo [ERROR] swa CLI のインストールに失敗しました。Node.js / npm がインストールされているか確認してください。
+        pause
+        exit /b 1
+    )
+    echo [INFO] swa CLI のインストール完了。
+)
+
 :: Azure Functions ビルド（publish）
 cd /d "%APP_DIR%"
 echo === Building Azure Functions ===
