@@ -81,6 +81,7 @@ public class CosmosDbInitializer : IHostedService
 
             await container.UpsertItemAsync(normalized);
         }
+    }
 
     public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
 }
