@@ -13,7 +13,13 @@ environment:
     database: Cosmos DB
     ru_per_sec: 1000  # Cosmos DB Free Tierの既定値
     auto_scaling: 自動スケーリングなし（固定）  
-
+setup:
+  database: データベースがなければ作成
+  schema: スキーマがなければ作成
+  test_data: 
+    initialize: localとdevelopmentの場合は初期化を行う。旧データを削除し、テストデータを入れる
+    seed_data: `/config/seed` 配下に各スキーマのテストデータを作成する
+    item_count: 10件
 security:
   cryption: AES-256による暗号化対象はなし
   RBAC: ユーザー登録を行わないので、ロールの分離もなし
