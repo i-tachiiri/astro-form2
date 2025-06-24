@@ -54,5 +54,6 @@ if errorlevel 1 (
 :: swa 起動
 cd /d "%SRC_DIR%"
 echo === Starting SWA ===
+for /f "tokens=5" %%a in ('netstat -aon ^| find ":7071" ^| find "LISTENING"') do taskkill /PID %%a /F
 swa start "%WASM_OUT%" --api-location "%FUNC_OUT%"
 pause
