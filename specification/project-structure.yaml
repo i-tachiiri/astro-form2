@@ -1,0 +1,47 @@
+frontend:
+  type: static-web
+  framework: nextjs
+  language: typescript
+  buildTool: next build && next export
+  output: out/
+  deployTarget: azure-static-web-apps
+
+api:
+  type: web-api
+  framework: aspnetcore
+  language: csharp
+  project: Api
+  deployTarget: azure-functions
+  auth: microsoft-entra-id
+
+domain:
+  type: class-library
+  language: csharp
+  project: Domain
+  responsibility: business-logic
+
+infrastructure:
+  type: class-library
+  language: csharp
+  project: Infrastructure
+  responsibility: external-integration
+  dependsOn:
+    - Azure.Storage.Blobs
+    - Azure.Cosmos
+
+shared:
+  type: class-library
+  language: csharp
+  project: Shared
+  responsibility: dto-models
+  sharedWith:
+    - api
+    - frontend (via generated types)
+
+deployment:
+  type: github-actions
+  environments:
+    - name: production
+      frontend: ./frontend
+      api: ./api
+      infra: azure-static-web-apps + azure-functions
