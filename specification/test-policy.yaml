@@ -8,7 +8,7 @@ ci:
     dotnet_format: `dotnet format --verify-no-changes` によりコード整形ルールの逸脱を検出
     dotnet_build: `dotnet build --configuration Release` によるビルド
     dotnet_test: `dotnet test --collect:\"XPlat Code Coverage\"` による単体テスト＋カバレッジ取得
-    coverlet: `coverlet` によるカバレッジ評価（70%以上で成功）
+    coverlet: `coverlet` で `--no-build` を付与しカバレッジを評価（70%以上で成功）
   rules:
     restrict_console: Console.WriteLine は禁止し、Serilog によるロギングに統一。`CA1303` 等のルールがエラーとして扱われます
     editor_config: `.editorconfig` に違反するコードは reject されます
