@@ -50,14 +50,37 @@ public class CosmosDbInitializer : IHostedService
     private static async Task InsertItemsAsync(Container container, string path)
     {
         if (!File.Exists(path)) return;
-        using var stream = File.OpenRead(path);
-        var items = await JsonSerializer.DeserializeAsync<JsonElement[]>(stream);
+
+        var json = await File.ReadAllTextAsync(path);
+        var items = JsonSerializer.Deserialize<List<Dictionary<string, JsonElement>>>(json);
         if (items == null) return;
+
         foreach (var item in items)
         {
-            await container.UpsertItemAsync(item);
+            var normalized = new Dictionary<string, object>();
+
+            foreach (var kvp in item)
+            {
+                normalized[kvp.Key] = kvp.Value.ValueKind switch
+                {
+                    JsonValueKind.String => kvp.Value.GetString(),
+                    JsonValueKind.Number => kvp.Value.TryGetInt64(out var l) ? l : kvp.Value.GetDouble(),
+                    JsonValueKind.True => true,
+                    JsonValueKind.False => false,
+                    JsonValueKind.Null => null!,
+                    _ => kvp.Value.ToString() // fallback
+                };
+            }
+
+            // パーティションキーがなければ追加
+            if (!normalized.ContainsKey("session_id"))
+                normalized["session_id"] = Guid.NewGuid().ToString();
+
+            if (!normalized.ContainsKey("id"))
+                normalized["id"] = Guid.NewGuid().ToString();
+
+            await container.UpsertItemAsync(normalized);
         }
-    }
 
     public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
 }
