@@ -21,6 +21,9 @@ screen: 画面ごとの設定を記載します。
   search: 検索画面です。
     purpose: 場所を指定して緯度・経度などを検索・表示する
     components: [AppShell, header, place_search_form,place_search_result]
+    api: 
+    　　trigger: OnInitializedAsync 
+        endpoint: `/log/access`
 
 component: 
   AppShell: 全画面で共通するレイアウト枠。ヘッダーや余白、ページ全体の構造を提供する
@@ -29,13 +32,16 @@ component:
     type: Autocomplete
     description: Places APIのAutocompleteで候補を提示し、選択する時にDetailsのデータを取得
     api: 
-      - end_point: /map/{place_id} 
+      /map/{place_id}: 
         trigger: onChange
         result: place_search_resultへ結果を表示する
-      - end_point: /log/action
+      /log/action:
         trigger: onChange
         result: ログをDBに保存する
   place_search_result: 
     type: DataGrid
-    content: [["項目名", "検索結果"],["住所", 住所全体],["緯度", 緯度の数値],["経度",経度の数値],["Googleマップ", Googleマップ上のURL]]
+    description: 場所の検索結果を表示する
+    content: 
+      source: /map/{place_id} の実行結果
+      content: [["項目名", "検索結果"],["住所", 住所全体],["緯度", 緯度の数値],["経度",経度の数値],["Googleマップ", Googleマップ上のURL]]
   
