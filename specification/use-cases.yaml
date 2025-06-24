@@ -10,8 +10,6 @@ business_process:
           /admin/seed: 旧データの削除とテストデータの追加（本番環境ではなし） 
       step2: 出生地を検索する
         screen: search
-        component_type: Autocomplete
-        component_name: place_search_form
         api: 
           /map: Places API の Autocomplete/Details を使う
           /log/action:  actionsコンテナへログを保存
