@@ -5,9 +5,11 @@ using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.WebUtilities;
 using Shared;
 using Application.Services;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Application.Functions;
 
+[ExcludeFromCodeCoverage]
 public class MapFunctions
 {
     private readonly BirthplaceSearchService _service;

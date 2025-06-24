@@ -4,9 +4,11 @@ using Microsoft.Azure.Cosmos;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Application.Functions;
 
+[ExcludeFromCodeCoverage]
 public class AdminFunctions
 {
     private readonly ILogger _logger;
