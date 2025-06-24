@@ -7,7 +7,7 @@ set APP_DIR=%SCRIPT_DIR%..\src\Application
 set WASM_DIR=%SCRIPT_DIR%..\src\Presentation
 set SRC_DIR=%SCRIPT_DIR%..\src
 set BIN_RELEASE=%APP_DIR%\bin\Release\net8.0
-set WASM_OUT=%WASM_DIR%\bin\Release\net8.0\wwwroot
+set WASM_OUT=%WASM_DIR%\bin\Release\net8.0
 set FUNC_OUT=%APP_DIR%\bin\Release\net8.0\publish
 
 :: local.settings.json / seed を各所にコピー
