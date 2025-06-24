@@ -1,7 +1,8 @@
 ## 仕様書
 
 - [API仕様書](specification/api.yaml)  
-- [データ構造](specification/data-design.yaml)  
+- [データ構造](specification/data-design.yaml)
+- - [データ構造](specification/project.yaml)  
 - [システム環境](specification/environment.yaml)  
 - [セキュリティ](specification/security.yaml)  
 - [テスト・CI](specification/test-policy.yaml)  
@@ -17,7 +18,7 @@
 - [Application](src/Application) – ユースケースやAPIのエントリーポイント（Azure Functionsなど）
 - [Domain](src/Domain) – 業務ロジック（Entity / ValueObject / ドメインサービス）
 - [Infrastructure](src/Infrastructure) – データアクセスや外部API連携（CosmosDB, Blobなど）
-- [Presentation](src/Presentation) – UIレイヤー（Blazor WASMなど）
+- [Presentation](src/Presentation) – UIレイヤー（Next.js）
 - [Shared](src/Shared) – DTO / Enum / 共通モデル
 
 ### テスト（`src/Test/`）
