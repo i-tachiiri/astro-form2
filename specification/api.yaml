@@ -153,7 +153,7 @@ paths:
   /test-data/seed:
     post:
       summary: テストデータの投入(本番環境では無効)
-      description: Cosmos DB にローカル用のテストデータ（access, actions, search_result 各コンテナ）を投入します。
+      description: ローカル・開発環境だけで動作します。Cosmos DB のデータを削除後、ローカル用のテストデータ（access, actions, search_result 各コンテナ）を投入します。
       responses:
         "200":
           description: データ投入成功
