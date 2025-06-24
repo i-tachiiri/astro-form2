@@ -25,11 +25,15 @@ screen: 画面ごとの設定を記載します。
     　　/log/access:
     　　  trigger: OnInitializedAsync 
           description: アクセスログを記録する
-          environment: local, development, production
+          environment: all
         /test-data/initialize:
     　　  trigger: OnInitializedAsync 
+          description: データベースとスキーマの作成を行う
+          environment: local, development     
+        /test-data/seed:
+    　　  trigger: OnInitializedAsync 
           description: アクセスログを記録する
-          environment: local, development, production          
+          environment: local, development            
           
 
 component: 
@@ -42,9 +46,11 @@ component:
       /map/{place_id}: 
         trigger: onChange
         result: place_search_resultへ結果を表示する
+        environment: all
       /log/action:
         trigger: onChange
         result: ログをDBに保存する
+        environment: all
   place_search_result: 
     type: DataGrid
     description: 場所の検索結果を表示する
