@@ -1,60 +1,73 @@
+# =========  Next.js-friendly spec  =========
+# 主要な要件はそのままに、呼び名・トリガー・パスの書式を Next.js (App Router) 向けに置き換えています
+# ───────────────────────────────────────────
+
 design:
-  color: Fluent UI のデフォルトテーマ(ライトモード)
-  font_family: Segoe UI
-  font_scale: 12px〜20px(Fluent Design に基づく)
-  icon: Fluent UI アイコン (@fluentui/react-icons)
+  color: Fluent UI のデフォルトテーマ (ライトモード)
+  font_family: Segoe UI   # next/font で読み込み可
+  font_scale: 12px-20px   # Fluent Design のスケール
+  icon: '@fluentui/react-icons'
   motion:
-    usage: 最小限
-    types: fade, slide
-    source: Motion API を使用
+    usage: minimal
+    types: [fade, slide]
+    source: CSS Motion API または framer-motion
   accessibility:
-    standard: WCAG 2.1 AA に準拠
-    keyboard_navigation: キーボード操作に完全対応
+    standard: WCAG 2.1 AA
+    keyboard_navigation: full
   responsive:
     breakpoints: [480px, 768px, 1024px]
     layout:
-      mobile: 1カラム(シングルカラム表示)
-      tablet: 1.5カラム(サイドナビを折りたたみ可能)
-      desktop: 2ペイン(サイドナビ固定 + メインコンテンツ)
+      mobile:   1-column
+      tablet:   1.5-column  # サイドナビをドロワー化
+      desktop:  2-pane      # サイドナビ固定 + Main
 
-screen: 画面ごとの設定を記載します。
-  search: 検索画面です。
-    purpose: 場所を指定して緯度・経度などを検索・表示する
-    components: [AppShell, header, place_search_form,place_search_result]
-    api: 
-    　　/log/access:
-    　　  trigger: OnInitializedAsync 
-          description: アクセスログを記録する
-          environment: all
-        /test-data/initialize:
-    　　  trigger: OnInitializedAsync 
-          description: データベースとスキーマの作成を行う
-          environment: local, development     
-        /test-data/seed:
-    　　  trigger: OnInitializedAsync 
-          description: アクセスログを記録する
-          environment: local, development            
-          
+# 画面 (pages / route groups)
+screen:
+  search:
+    purpose: 「場所」を指定して緯度・経度などを検索・表示
+    components: [Layout, Header, PlaceSearchForm, PlaceSearchResult]
+    api:                                   # すべて /app/api/ 配下に配置
+      /api/log/access:                     # POST
+        trigger: useEffect (初回レンダリング時)
+        description: アクセスログを記録
+        environment: [local, development, production]
+      /api/test-data/initialize:           # POST
+        trigger: useEffect (初回レンダリング時)
+        description: DB & スキーマ作成
+        environment: [local, development]
+      /api/test-data/seed:                 # POST
+        trigger: useEffect (初回レンダリング時)
+        description: テストデータ投入
+        environment: [local, development]
 
-component: 
-  AppShell: 全画面で共通するレイアウト枠。ヘッダーや余白、ページ全体の構造を提供する
-  header: ページのタイトル(Astro Search)を表示するヘッダー
-  place_search_form: 
+# 再利用コンポーネント
+component:
+  Layout:             # app/layout.tsx
+    role: ページ共通の枠 (Header・左右パディング等)
+  Header:             # components/Header.tsx
+    role: ページタイトル「Astro Search」を表示
+  PlaceSearchForm:    # components/PlaceSearchForm.tsx
     type: Autocomplete
-    description: Places APIのAutocompleteで候補を提示し、選択する時にDetailsのデータを取得
-    api: 
-      /map/{place_id}: 
-        trigger: onChange
-        result: place_search_resultへ結果を表示する
-        environment: all
-      /log/action:
-        trigger: onChange
-        result: ログをDBに保存する
-        environment: all
-  place_search_result: 
-    type: DataGrid
-    description: 場所の検索結果を表示する
-    content: 
-      source: /map/{place_id} の実行結果
-      content: [["項目名", "検索結果"],["住所", 住所全体],["緯度", 緯度の数値],["経度",経度の数値],["Googleマップ", Googleマップ上のURL]]
-  
+    description: Google Places Autocomplete → Details 取得
+  PlaceSearchResult:  # components/PlaceSearchResult.tsx
+    type: Table       # 例: @tanstack/react-table で実装
+    description: 取得した場所情報を表示
+    content_source: /api/map/[place_id] のレスポンス
+    columns:
+      - 項目名
+      - 検索結果
+    rows_example:
+      - [住所,      <full_address>]
+      - [緯度,      <latitude>]
+      - [経度,      <longitude>]
+      - [GoogleMap, <url>]
+
+# ===== 組み込み先のディレクトリ例 =====
+# app/
+#   layout.tsx         ← Layout
+#   search/
+#     page.tsx         ← Search 画面 (use client)
+# components/
+#   Header.tsx
+#   PlaceSearchForm.tsx
+#   PlaceSearchResult.tsx
