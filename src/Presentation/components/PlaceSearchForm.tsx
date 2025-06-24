@@ -34,7 +34,17 @@ export default function PlaceSearchForm({ onSelected }: Props) {
     const resp = await fetch(`/api/map?query=${encodeURIComponent(q)}`);
     if (resp.ok) {
       const data = await resp.json();
-      setSuggestions(data.results);
+      const results = data.results ?? data.Results ?? [];
+      if (Array.isArray(results)) {
+        const normalized = results.map((r: any) => ({
+          place_id: r.place_id ?? r.placeId,
+          name: r.name,
+          description: r.description,
+        }));
+        setSuggestions(normalized);
+      } else {
+        setSuggestions([]);
+      }
     }
   }
 
@@ -43,8 +53,16 @@ export default function PlaceSearchForm({ onSelected }: Props) {
     setSuggestions([]);
     const resp = await fetch(`/api/map/${item.place_id}`);
     if (resp.ok) {
-      const detail: PlaceDetails = await resp.json();
-      onSelected(detail);
+      const detail = await resp.json();
+      const normalized: PlaceDetails = {
+        place_id: detail.place_id ?? detail.placeId,
+        name: detail.name,
+        address: detail.address,
+        lat: detail.lat,
+        lng: detail.lng,
+        map_url: detail.map_url ?? detail.mapUrl,
+      };
+      onSelected(normalized);
     }
   }
 
