@@ -2,7 +2,8 @@
 
 - [API仕様書](specification/api.yaml)  
 - [データ構造](specification/data-design.yaml)
-- - [データ構造](specification/project.yaml)  
+- [プロジェクト構成](specification/project.yaml)  
+- [テスト方針](specification/test-policy.yaml)  
 - [システム環境](specification/environment.yaml)  
 - [セキュリティ](specification/security.yaml)  
 - [テスト・CI](specification/test-policy.yaml)  
