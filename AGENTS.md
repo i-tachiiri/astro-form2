@@ -1,15 +1,16 @@
 - 仕様と指示が相反する場合、差異を /docs/ai-review.md へ記載
 - PR作成前に下記を実施し、テストが通ればPRを作成
   - カバレッジが足りなければテストを実装する
+  - フロントエンドは Next.js (React) で構築されているため、UI テストは npm スクリプトを利用する
 ```
 dotnet build astro-form2.sln -c Release
 dotnet format --verify-no-changes
 dotnet test astro-form2.sln --collect:"XPlat Code Coverage"
 
 # アプリケーション層（70%以上必要）
-coverlet ./src/Test/Application/bin/Release/net8.0/Application.Test.dll \
+coverlet ./src/Test/Application/bin/Release/net8.0/Application.Tests.dll \
   --target "dotnet" \
-  --targetargs "test ./src/Test/Application/Application.Test.csproj -c Release" \
+  --targetargs "test ./src/Test/Application/Application.Tests.csproj -c Release" \
   --format cobertura \
   --output ./TestResults/coverage-application.xml \
   --threshold 70 \
@@ -17,9 +18,9 @@ coverlet ./src/Test/Application/bin/Release/net8.0/Application.Test.dll \
   --threshold-stat total
 
 # ドメイン層（70%以上必要）
-coverlet ./src/Test/Domain/bin/Release/net8.0/Domain.Test.dll \
+coverlet ./src/Test/Domain/bin/Release/net8.0/Domain.Tests.dll \
   --target "dotnet" \
-  --targetargs "test ./src/Test/Domain/Domain.Test.csproj -c Release" \
+  --targetargs "test ./src/Test/Domain/Domain.Tests.csproj -c Release" \
   --format cobertura \
   --output ./TestResults/coverage-domain.xml \
   --threshold 70 \
