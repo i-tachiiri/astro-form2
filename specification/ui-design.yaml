@@ -22,8 +22,15 @@ screen: 画面ごとの設定を記載します。
     purpose: 場所を指定して緯度・経度などを検索・表示する
     components: [AppShell, header, place_search_form,place_search_result]
     api: 
-    　　trigger: OnInitializedAsync 
-        endpoint: `/log/access`
+    　　/log/access:
+    　　  trigger: OnInitializedAsync 
+          description: アクセスログを記録する
+          environment: local, development, production
+        /test-data/initialize:
+    　　  trigger: OnInitializedAsync 
+          description: アクセスログを記録する
+          environment: local, development, production          
+          
 
 component: 
   AppShell: 全画面で共通するレイアウト枠。ヘッダーや余白、ページ全体の構造を提供する
