@@ -66,7 +66,7 @@ secrets.json
 appsettings.Development.json
 client_secret.json
 
-# npm / JS 系（Blazor WASM等を拡張した場合）
+# npm / JS 系（Next.js などを利用する場合）
 # ========================
 node_modules/
 dist/

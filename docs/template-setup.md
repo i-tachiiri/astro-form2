@@ -100,7 +100,7 @@ secrets.json
 *.sln.iml
 
 # ========================
-# npm / JS 系（Blazor WASM等を拡張した場合）
+# npm / JS 系（Next.js などを利用する場合）
 # ========================
 node_modules/
 dist/
@@ -130,7 +130,7 @@ readme.md
 - [Application](src/Application) – ユースケースやAPIのエントリーポイント（Azure Functionsなど）
 - [Domain](src/Domain) – 業務ロジック（Entity / ValueObject / ドメインサービス）
 - [Infrastructure](src/Infrastructure) – データアクセスや外部API連携（CosmosDB, Blobなど）
-- [Presentation](src/Presentation) – UIレイヤー（Blazor WASMなど）
+- [Presentation](src/Presentation) – UIレイヤー（Next.js）
 - [Shared](src/Shared) – DTO / Enum / 共通モデル
 
 ### テスト（`src/Test/`）
