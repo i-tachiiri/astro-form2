@@ -10,7 +10,7 @@ dotnet test astro-form2.sln --collect:"XPlat Code Coverage"
 # アプリケーション層（70%以上必要）
 coverlet ./src/Test/Application/bin/Release/net8.0/Application.Tests.dll \
   --target "dotnet" \
-  --targetargs "test ./src/Test/Application/Application.Tests.csproj -c Release" \
+  --targetargs "test ./src/Test/Application/Application.Tests.csproj -c Release --no-build" \
   --format cobertura \
   --output ./TestResults/coverage-application.xml \
   --threshold 70 \
@@ -20,7 +20,7 @@ coverlet ./src/Test/Application/bin/Release/net8.0/Application.Tests.dll \
 # ドメイン層（70%以上必要）
 coverlet ./src/Test/Domain/bin/Release/net8.0/Domain.Tests.dll \
   --target "dotnet" \
-  --targetargs "test ./src/Test/Domain/Domain.Tests.csproj -c Release" \
+  --targetargs "test ./src/Test/Domain/Domain.Tests.csproj -c Release --no-build" \
   --format cobertura \
   --output ./TestResults/coverage-domain.xml \
   --threshold 70 \
