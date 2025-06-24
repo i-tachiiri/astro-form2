@@ -31,7 +31,7 @@ public class BirthplaceSearchService
             await _logRepository.AddActionLogAsync(log);
         }
 
-        var url = $"https://maps.googleapis.com/maps/api/place/autocomplete/json?input={Uri.EscapeDataString(query)}&key={_apiKey}";
+        var url = $"https://maps.googleapis.com/maps/api/place/autocomplete/json?input={Uri.EscapeDataString(query)}&language=ja&key={_apiKey}";
         var httpResp = await _httpClient.GetAsync(url);
         httpResp.EnsureSuccessStatusCode();
         var json = await httpResp.Content.ReadAsStringAsync();
@@ -53,7 +53,7 @@ public class BirthplaceSearchService
     {
         if (string.IsNullOrWhiteSpace(placeId)) throw new ArgumentException("placeId is required", nameof(placeId));
 
-        var url = $"https://maps.googleapis.com/maps/api/place/details/json?place_id={Uri.EscapeDataString(placeId)}&key={_apiKey}";
+        var url = $"https://maps.googleapis.com/maps/api/place/details/json?place_id={Uri.EscapeDataString(placeId)}&language=ja&key={_apiKey}";
         var httpResp = await _httpClient.GetAsync(url);
         httpResp.EnsureSuccessStatusCode();
         var json = await httpResp.Content.ReadAsStringAsync();

@@ -105,4 +105,43 @@ public class BirthplaceSearchServiceTest
         var service = new BirthplaceSearchService(client, repo, NullLogger<BirthplaceSearchService>.Instance);
         await Assert.ThrowsAsync<InvalidOperationException>(() => service.GetPlaceDetailsAsync("1", "tokyo", "sid"));
     }
+
+    [Fact]
+    public async Task SearchAsync_Uses_Japanese_Language()
+    {
+        string? requestedUrl = null;
+        var handler = new FakeHttpHandler(req =>
+        {
+            requestedUrl = req.RequestUri!.ToString();
+            return new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Content = new StringContent("{\"predictions\":[]}")
+            };
+        });
+        var repo = new FakeLogRepository();
+        var client = new HttpClient(handler);
+        var service = new BirthplaceSearchService(client, repo, NullLogger<BirthplaceSearchService>.Instance);
+        await service.SearchAsync("tokyo", string.Empty);
+        Assert.Contains("language=ja", requestedUrl);
+    }
+
+    [Fact]
+    public async Task GetPlaceDetailsAsync_Uses_Japanese_Language()
+    {
+        string? requestedUrl = null;
+        var json = "{\"status\":\"OK\",\"result\":{\"place_id\":\"1\",\"name\":\"Tokyo\",\"formatted_address\":\"Tokyo\",\"geometry\":{\"location\":{\"lat\":1,\"lng\":2}},\"url\":\"u\"}}";
+        var handler = new FakeHttpHandler(req =>
+        {
+            requestedUrl = req.RequestUri!.ToString();
+            return new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Content = new StringContent(json)
+            };
+        });
+        var repo = new FakeLogRepository();
+        var client = new HttpClient(handler);
+        var service = new BirthplaceSearchService(client, repo, NullLogger<BirthplaceSearchService>.Instance);
+        await service.GetPlaceDetailsAsync("1", "tokyo", string.Empty);
+        Assert.Contains("language=ja", requestedUrl);
+    }
 }
