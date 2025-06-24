@@ -39,4 +39,6 @@ builder.Services.AddSingleton<ILogRepository>(_ =>
 
 builder.Services.AddSingleton<Application.Services.BirthplaceSearchService>();
 
+builder.Services.AddHostedService<CosmosDbInitializer>();
+
 builder.Build().Run();
