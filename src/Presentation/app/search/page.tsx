@@ -4,8 +4,9 @@ import PlaceSearchForm from '../../components/PlaceSearchForm';
 import PlaceSearchResult from '../../components/PlaceSearchResult';
 
 interface AccessLog {
-  session_id: string;
-  accessed_at: string;
+  id: string;
+  sessionId: string;
+  accessedAt: string;
 }
 
 interface PlaceDetails {
@@ -21,7 +22,11 @@ export default function SearchPage() {
   const [result, setResult] = useState<PlaceDetails | undefined>();
 
   useEffect(() => {
-    const log: AccessLog = { session_id: crypto.randomUUID(), accessed_at: new Date().toISOString() };
+    const log: AccessLog = {
+      id: crypto.randomUUID(),
+      sessionId: crypto.randomUUID(),
+      accessedAt: new Date().toISOString(),
+    };
     fetch('/api/log/access', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(log) });
     fetch('/api/test-data/initialize', { method: 'POST' }).catch(() => {});
     fetch('/api/test-data/seed', { method: 'POST' }).catch(() => {});

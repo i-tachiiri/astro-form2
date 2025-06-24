@@ -8,3 +8,6 @@
 - `SearchResults` と `PlaceDetails` の JSON プロパティ名は実装では camelCase
   (`placeId`, `mapUrl` 等) だが、仕様書では snake_case (`place_id`, `map_url` 等)
   と記載されている
+- `AccessLog` 送信時の JSON プロパティも実装では `id`, `sessionId`, `accessedAt`
+  を要求するが、仕様書では `session_id`, `accessed_at` のみを送信すると記載
+  されている
