@@ -10,6 +10,9 @@ set SRC_DIR=%SCRIPT_DIR%..\src
 set FUNC_OUT=%APP_DIR%\bin\Release\net8.0\publish
 set WASM_OUT=%WASM_DIR%\bin\Release\net8.0\publish
 
+:: ========= ポート 7071 を強制解放 =========
+for /f "tokens=5" %%a in ('netstat -aon ^| find ":7071" ^| find "LISTENING"') do taskkill /PID %%a /F >nul 2>nul
+
 :: ========= swa CLI の存在確認 =========
 where swa >nul 2>nul
 if errorlevel 1 (
@@ -44,8 +47,7 @@ if errorlevel 1 (
     pause & exit /b 1
 )
 
-:: ========= ポート 7071 を強制解放 =========
-for /f "tokens=5" %%a in ('netstat -aon ^| find ":7071" ^| find "LISTENING"') do taskkill /PID %%a /F >nul 2>nul
+
 
 :: ========= SWA 起動 =========
 cd /d "%SRC_DIR%"
