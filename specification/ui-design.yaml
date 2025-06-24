@@ -25,6 +25,17 @@ screen: 画面ごとの設定を記載します。
 component: 
   AppShell: 全画面で共通するレイアウト枠。ヘッダーや余白、ページ全体の構造を提供する
   header: ページのタイトル(Astro Search)を表示するヘッダー
-  place_search_form: テキストの入力フォーム。Places APIのAutocompleteで候補を提示し、選択時にDetailsのデータを取得。place_search_resultへ結果を表示する
-  place_search_result: DataGridで[["項目名", "検索結果"],["住所", 住所全体],["緯度", 緯度の数値],["経度",経度の数値],["Googleマップ", Googleマップ上のURL]]を表示する
+  place_search_form: 
+    type: Autocomplete
+    description: Places APIのAutocompleteで候補を提示し、選択する時にDetailsのデータを取得
+    api: 
+      - end_point: /map/{place_id} 
+        trigger: onChange
+        result: place_search_resultへ結果を表示する
+      - end_point: /log/action
+        trigger: onChange
+        result: ログをDBに保存する
+  place_search_result: 
+    type: DataGrid
+    content: [["項目名", "検索結果"],["住所", 住所全体],["緯度", 緯度の数値],["経度",経度の数値],["Googleマップ", Googleマップ上のURL]]
   
