@@ -4,9 +4,11 @@ using Domain.Repositories;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Application.Functions;
 
+[ExcludeFromCodeCoverage]
 public class LogFunctions
 {
     private readonly ILogRepository _repository;
