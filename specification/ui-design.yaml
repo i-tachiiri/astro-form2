@@ -1,71 +1,93 @@
 design:
-  color: Fluent UI のデフォルトテーマ (ライトモード)
-  font_family: Segoe UI   # next/font で読み込み可
-  font_scale: 12px-20px   # Fluent Design のスケール
+  color: NextUI のデフォルトテーマ (ライトモード)
+  font\_family: Segoe UI   # next/font で読み込み可
+  font\_scale: 12px-20px   # Fluent Design のスケール
   icon: '@fluentui/react-icons'
-  motion:
-    usage: minimal
-    types: [fade, slide]
-    source: CSS Motion API または framer-motion
-  accessibility:
-    standard: WCAG 2.1 AA
-    keyboard_navigation: full
-  responsive:
-    breakpoints: [480px, 768px, 1024px]
-    layout:
-      mobile:   1-column
-      tablet:   1.5-column  # サイドナビをドロワー化
-      desktop:  2-pane      # サイドナビ固定 + Main
+motion:
+  usage: minimal
+  types: \[fade, slide]
+  source: CSS Motion API または framer-motion
+accessibility:
+  standard: WCAG 2.1 AA
+  keyboard\_navigation: full
+
+# ---------------- グローバルレイアウト設定 ----------------
+
+layout:
+  centered: true            # 全コンテンツを中央寄せ
+  max\_width:
+  mobile: 95%             # <480px
+  tablet: 75%             # 480–768px
+  desktop: 60%            # ≥768px
+  vertical\_stack: true      # 縦積み（Vertical Stack UI）
+  gap: 1rem                 # 要素間の隙間
+  full\_width\_children: true # 子要素は横幅いっぱい (fullWidth)
+
+# -----------------------------------------------------------
+
+responsive:
+  breakpoints: \[480px, 768px, 1024px]
+  layout:
+  mobile:   1-column      # モバイル
+  tablet:   1.5-column    # サイドナビをドロワー化
+  desktop:  2-pane        # サイドナビ固定 + Main
 
 screen:
   search:
-    purpose: "場所"を指定して緯度・経度などを検索・表示
-    components: [Layout, Header, PlaceSearchForm, PlaceSearchResult]
-    api: ローカル開発時、APIのポートが7071で、フロントの3000と異なるので .env.localを参照してbaseUrlを取得
-      /api/map:                  # GET  <-- added
-        trigger: onChange (debounce付き)
-        description: Google Places で候補検索
-      /api/map/[place_id]:       # GET  <-- added
-        trigger: onSelect
-        description: Place の詳細取得
-      /api/log/access:           # POST
-        trigger: useEffect (初回レンダリング時)
-        description: アクセスログを記録
-        environment: [local, development, production]
-      /api/log/action:           # POST  <-- added
-        trigger: onSubmit
-        description: 検索アクションログ
-        environment: [local, development, production]
-      /api/log/search_result:    # POST  <-- added
-        trigger: onSelect
-        description: 検索結果ログ
-        environment: [local, development, production]
-      /api/test-data/initialize: # POST
-        trigger: useEffect (初回レンダリング時)
-        description: Cosmos DB & コンテナ作成
-        environment: [local, development]
-      /api/test-data/seed:       # POST
-        trigger: useEffect (初回レンダリング時)
-        description: テストデータ投入
-        environment: [local, development]
+  purpose: "場所"を指定して緯度・経度などを検索・表示
+  components: \[Layout, Header, PlaceSearchForm, PlaceSearchResult]
+api:
+  /api/map:
+    method: GET
+    trigger: onChange (debounce 300ms)
+    description: Google Places で候補検索
+  /api/map/\[place\_id]:
+    method: GET
+    trigger: onSelect
+    description: Place の詳細取得
+  /api/log/access:
+    method: POST
+    trigger: useEffect (初回レンダリング時)
+    description: アクセスログを記録
+    environment: \[local, development, production]
+  /api/log/action:
+    method: POST
+    trigger: onSubmit
+    description: 検索アクションログ
+    environment: \[local, development, production]
+  /api/log/search\_result:
+    method: POST
+    trigger: onSelect
+    description: 検索結果ログ
+    environment: \[local, development, production]
+  /api/test-data/initialize:
+    method: POST
+    trigger: useEffect (初回レンダリング時)
+    description: Cosmos DB & コンテナ作成
+    environment: \[local, development]
+  /api/test-data/seed:
+    method: POST
+    trigger: useEffect (初回レンダリング時)
+    description: テストデータ投入
+    environment: \[local, development]
 
 component:
   Layout:
     role: ページ共通の枠 (Header・左右パディング等)
-  Header:
+    Header:
     role: ページタイトル「Astro Search」を表示
   PlaceSearchForm:
-    type: Autocomplete
+  type: Autocomplete
     description: Google Places Autocomplete → Details 取得
+    props:
+    fullWidth: true         # 横幅いっぱいに広げる
   PlaceSearchResult:
-    type: Table       # 例: @tanstack/react-table で実装
+    type: Table               # 例: NextUI <Table>
     description: 取得した場所情報を表示
-    content_source: /api/map/[place_id] のレスポンス
-    columns:
-      - 項目名
-      - 検索結果
-    rows_example:
-      - [住所,      <full_address>]
-      - [緯度,      <latitude>]
-      - [経度,      <longitude>]
-      - [GoogleMap, <url>]
+    content\_source: /api/map/[place_id]
+    columns: \[項目名, 検索結果]
+    rows\_example:
+      \- \[住所, '\<full\_address>']
+      \- \[緯度, '<latitude>']
+      \- \[経度, '<longitude>']
+      \- \[GoogleMap, '<url>']
