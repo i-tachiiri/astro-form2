@@ -26,7 +26,7 @@ if errorlevel 1 (
 :: ========= local.settings.json / seed コピー =========
 if exist "%SCRIPT_DIR%local.settings.json" copy /Y "%SCRIPT_DIR%local.settings.json" "%APP_DIR%\local.settings.json"
 if exist "%SCRIPT_DIR%seed" xcopy /E /Y /I "%SCRIPT_DIR%seed" "%APP_DIR%\seed" >nul
-if exist "%SCRIPT_DIR%env.local" copy /Y "%FRONT_DIR%\env.local"
+if exist "%SCRIPT_DIR%.env.local" copy /Y "%FRONT_DIR%\.env.local"
 
 :: ========= Functions 起動 =========
 start "API" cmd /k "cd /d %APP_DIR% && func start"
