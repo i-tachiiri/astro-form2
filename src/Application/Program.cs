@@ -4,8 +4,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.IO;
+using System.Diagnostics.CodeAnalysis;
 using Domain.Repositories;
 using Infrastructure;
+
+[assembly: ExcludeFromCodeCoverage]
 
 var builder = FunctionsApplication.CreateBuilder(args);
 
