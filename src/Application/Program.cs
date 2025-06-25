@@ -19,7 +19,7 @@ if (string.Equals(environment, "Development", StringComparison.OrdinalIgnoreCase
 {
     try
     {
-        var sourcePath = Path.Combine("..", "..", "#config", "local.settings.json");
+        var sourcePath = Path.Combine("..", "..", "config", "local.settings.json");
         var destPath = Path.Combine(Environment.CurrentDirectory, "local.settings.json");
         File.Copy(sourcePath, destPath, true);
     }
