@@ -1,7 +1,3 @@
-# =========  Next.js-friendly spec  =========
-# 主要な要件はそのままに、呼び名・トリガー・パスの書式を Next.js (App Router) 向けに置き換えています
-# ───────────────────────────────────────────
-
 design:
   color: Fluent UI のデフォルトテーマ (ライトモード)
   font_family: Segoe UI   # next/font で読み込み可
@@ -21,35 +17,47 @@ design:
       tablet:   1.5-column  # サイドナビをドロワー化
       desktop:  2-pane      # サイドナビ固定 + Main
 
-# 画面 (pages / route groups)
 screen:
   search:
-    purpose: 「場所」を指定して緯度・経度などを検索・表示
+    purpose: "場所"を指定して緯度・経度などを検索・表示
     components: [Layout, Header, PlaceSearchForm, PlaceSearchResult]
-    api:                                   # すべて /app/api/ 配下に配置
-      /api/log/access:                     # POST
+    api:
+      /api/map:                  # GET  <-- added
+        trigger: onSubmit
+        description: Google Places で候補検索
+      /api/map/[place_id]:       # GET  <-- added
+        trigger: onSelect
+        description: Place の詳細取得
+      /api/log/access:           # POST
         trigger: useEffect (初回レンダリング時)
         description: アクセスログを記録
         environment: [local, development, production]
-      /api/test-data/initialize:           # POST
+      /api/log/action:           # POST  <-- added
+        trigger: onSubmit
+        description: 検索アクションログ
+        environment: [local, development, production]
+      /api/log/search_result:    # POST  <-- added
+        trigger: onSelect
+        description: 検索結果ログ
+        environment: [local, development, production]
+      /api/test-data/initialize: # POST
         trigger: useEffect (初回レンダリング時)
-        description: DB & スキーマ作成
+        description: Cosmos DB & コンテナ作成
         environment: [local, development]
-      /api/test-data/seed:                 # POST
+      /api/test-data/seed:       # POST
         trigger: useEffect (初回レンダリング時)
         description: テストデータ投入
         environment: [local, development]
 
-# 再利用コンポーネント
 component:
-  Layout:             # app/layout.tsx
+  Layout:
     role: ページ共通の枠 (Header・左右パディング等)
-  Header:             # components/Header.tsx
+  Header:
     role: ページタイトル「Astro Search」を表示
-  PlaceSearchForm:    # components/PlaceSearchForm.tsx
+  PlaceSearchForm:
     type: Autocomplete
     description: Google Places Autocomplete → Details 取得
-  PlaceSearchResult:  # components/PlaceSearchResult.tsx
+  PlaceSearchResult:
     type: Table       # 例: @tanstack/react-table で実装
     description: 取得した場所情報を表示
     content_source: /api/map/[place_id] のレスポンス
@@ -61,13 +69,3 @@ component:
       - [緯度,      <latitude>]
       - [経度,      <longitude>]
       - [GoogleMap, <url>]
-
-# ===== 組み込み先のディレクトリ例 =====
-# app/
-#   layout.tsx         ← Layout
-#   search/
-#     page.tsx         ← Search 画面 (use client)
-# components/
-#   Header.tsx
-#   PlaceSearchForm.tsx
-#   PlaceSearchResult.tsx
