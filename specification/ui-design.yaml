@@ -21,7 +21,7 @@ screen:
   search:
     purpose: "場所"を指定して緯度・経度などを検索・表示
     components: [Layout, Header, PlaceSearchForm, PlaceSearchResult]
-    api:
+    api: ローカル開発時、APIのポートが7071で、フロントの3000と異なるので .env.localを参照してbaseUrlを取得
       /api/map:                  # GET  <-- added
         trigger: onSubmit
         description: Google Places で候補検索
