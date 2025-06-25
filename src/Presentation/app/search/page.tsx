@@ -1,5 +1,7 @@
 'use client';
 import { useState, useRef } from 'react';
+import Layout from '../../components/Layout';
+import Header from '../../components/Header';
 import PlaceSearchForm from '../../components/PlaceSearchForm';
 import PlaceSearchResult from '../../components/PlaceSearchResult';
 
@@ -17,9 +19,10 @@ export default function SearchPage() {
   const sessionIdRef = useRef<string>(crypto.randomUUID());
 
   return (
-    <div>
+    <Layout>
+      <Header />
       <PlaceSearchForm onSelected={setResult} sessionId={sessionIdRef.current} />
       <PlaceSearchResult result={result} />
-    </div>
+    </Layout>
   );
 }

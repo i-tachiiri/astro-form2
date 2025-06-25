@@ -1,5 +1,6 @@
 'use client';
 import { useState, useEffect, useRef } from 'react';
+import { Autocomplete, AutocompleteItem } from '@nextui-org/autocomplete';
 
 interface SearchResultItem {
   place_id: string;
@@ -105,15 +106,19 @@ export default function PlaceSearchForm({ onSelected, sessionId }: Props) {
   }
 
   return (
-    <div>
-      <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search place" />
-      {suggestions.length > 0 && (
-        <ul className="suggestions">
-          {suggestions.map((s) => (
-            <li key={s.place_id} onClick={() => select(s)}>{s.description}</li>
-          ))}
-        </ul>
-      )}
-    </div>
+    <Autocomplete
+      aria-label="Search place"
+      className="w-full"
+      inputValue={query}
+      onInputChange={(value) => setQuery(value)}
+      onSelectionChange={(key) => {
+        const item = suggestions.find((s) => s.place_id === key);
+        if (item) select(item);
+      }}
+    >
+      {suggestions.map((s) => (
+        <AutocompleteItem key={s.place_id}>{s.description}</AutocompleteItem>
+      ))}
+    </Autocomplete>
   );
 }
