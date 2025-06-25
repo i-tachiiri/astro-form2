@@ -1,5 +1,5 @@
 'use client';
-import { useState, FormEvent } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 interface SearchResultItem {
   place_id: string;
@@ -26,41 +26,51 @@ const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL ?? '';
 export default function PlaceSearchForm({ onSelected, sessionId }: Props) {
   const [query, setQuery] = useState('');
   const [suggestions, setSuggestions] = useState<SearchResultItem[]>([]);
+  const timerRef = useRef<NodeJS.Timeout>();
 
-  async function submit(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault();
+  useEffect(() => {
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+    }
     const q = query.trim();
     if (!q) {
       setSuggestions([]);
       return;
     }
-    const resp = await fetch(`${baseUrl}/api/map?query=${encodeURIComponent(q)}`);
-    if (resp.ok) {
-      const data = await resp.json();
-      const results = data.results ?? data.Results ?? [];
-      if (Array.isArray(results)) {
-        const normalized = results.map((r: any) => ({
-          place_id: r.place_id ?? r.placeId ?? r.PlaceId,
-          name: r.name ?? r.Name,
-          description: r.description ?? r.Description,
-        }));
-        setSuggestions(normalized);
-      } else {
-        setSuggestions([]);
+    timerRef.current = setTimeout(async () => {
+      const resp = await fetch(`${baseUrl}/api/map?query=${encodeURIComponent(q)}`);
+      if (resp.ok) {
+        const data = await resp.json();
+        const results = data.results ?? data.Results ?? [];
+        if (Array.isArray(results)) {
+          const normalized = results.map((r: any) => ({
+            place_id: r.place_id ?? r.placeId ?? r.PlaceId,
+            name: r.name ?? r.Name,
+            description: r.description ?? r.Description,
+          }));
+          setSuggestions(normalized);
+        } else {
+          setSuggestions([]);
+        }
       }
-    }
-    const actionLog = {
-      id: crypto.randomUUID(),
-      session_id: sessionId,
-      action_name: 'search',
-      actioned_at: new Date().toISOString(),
+      const actionLog = {
+        id: crypto.randomUUID(),
+        session_id: sessionId,
+        action_name: 'search',
+        actioned_at: new Date().toISOString(),
+      };
+      fetch(`${baseUrl}/api/log/action`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(actionLog),
+      }).catch(() => {});
+    }, 300);
+    return () => {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+      }
     };
-    fetch(`${baseUrl}/api/log/action`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(actionLog),
-    }).catch(() => {});
-  }
+  }, [query, sessionId]);
 
   async function select(item: SearchResultItem) {
     setQuery(item.description);
@@ -95,7 +105,7 @@ export default function PlaceSearchForm({ onSelected, sessionId }: Props) {
   }
 
   return (
-    <form onSubmit={submit}>
+    <div>
       <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search place" />
       {suggestions.length > 0 && (
         <ul className="suggestions">
@@ -104,6 +114,6 @@ export default function PlaceSearchForm({ onSelected, sessionId }: Props) {
           ))}
         </ul>
       )}
-    </form>
+    </div>
   );
 }
