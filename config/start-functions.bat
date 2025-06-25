@@ -30,7 +30,12 @@ if exist "%SCRIPT_DIR%seed" xcopy /E /Y /I "%SCRIPT_DIR%seed" "%APP_DIR%\seed" >
 :: ========= Functions 起動 =========
 start "API" cmd /k "cd /d %APP_DIR% && func start"
 
+:: ========= ポート7071の待機 =========
+echo Waiting for Azure Functions (port 7071)...
+:waitLoop
+timeout /t 2 >nul
+netstat -ano | findstr :7071 >nul
+if errorlevel 1 goto waitLoop
+
 :: ========= Frontend 起動 =========
 start "FRONT" cmd /k "cd /d %FRONT_DIR% && npm run dev"
-
-pause
