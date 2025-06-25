@@ -32,7 +32,10 @@ security:
   audit:
     enabled: false
     reason: ログ用途のみで、ユーザー識別なし
-
+naming_convention:
+  api: snake_case  # API リクエスト/レスポンスの JSON におけるキー名
+  domain: PascalCase (C#標準) → JsonPropertyでsnake_caseとの互換性を保つ
+  cosmos_db: snake_case （Cosmos DB に保存される JSON）
 schemas:
   - container: access
     partition_key: /session_id
