@@ -23,7 +23,7 @@ screen:
     components: [Layout, Header, PlaceSearchForm, PlaceSearchResult]
     api: ローカル開発時、APIのポートが7071で、フロントの3000と異なるので .env.localを参照してbaseUrlを取得
       /api/map:                  # GET  <-- added
-        trigger: onSubmit
+        trigger: onChange (debounce付き)
         description: Google Places で候補検索
       /api/map/[place_id]:       # GET  <-- added
         trigger: onSelect
