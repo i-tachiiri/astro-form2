@@ -1,88 +1,47 @@
-using System.Net;
-using Domain.Models;
-using Domain.Repositories;
 using Microsoft.Azure.Functions.Worker;
-using Microsoft.Azure.Functions.Worker.Http;
-using Microsoft.Extensions.Logging;
+using Microsoft.Azure.Functions.Worker.Builder;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using System;
+using System.IO;
 using System.Diagnostics.CodeAnalysis;
+using Domain.Repositories;
+using Infrastructure;
 
-namespace Application.Functions;
+[assembly: ExcludeFromCodeCoverage]
 
-[ExcludeFromCodeCoverage]
-public class LogFunctions
+var builder = FunctionsApplication.CreateBuilder(args);
+
+builder.ConfigureFunctionsWebApplication();
+
+var environment = Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT");
+if (string.Equals(environment, "Development", StringComparison.OrdinalIgnoreCase))
 {
-    private readonly ILogRepository _repository;
-    private readonly ILogger _logger;
-
-    public LogFunctions(ILogRepository repository, ILoggerFactory loggerFactory)
+    try
     {
-        _repository = repository;
-        _logger = loggerFactory.CreateLogger<LogFunctions>();
+        var sourcePath = Path.Combine("..", "..", "#config", "local.settings.json");
+        var destPath = Path.Combine(Environment.CurrentDirectory, "local.settings.json");
+        File.Copy(sourcePath, destPath, true);
     }
-
-    [Function("LogAccess")]
-    public async Task<HttpResponseData> LogAccess(
-        [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "log/access")] HttpRequestData req)
+    catch (Exception ex)
     {
-        var log = await req.ReadFromJsonAsync<AccessLog>();
-        if (log == null)
-        {
-            return req.CreateResponse(HttpStatusCode.BadRequest);
-        }
-
-        try
-        {
-            await _repository.AddAccessLogAsync(log);
-            return req.CreateResponse(HttpStatusCode.OK);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Failed to log access");
-            return req.CreateResponse(HttpStatusCode.InternalServerError);
-        }
-    }
-
-    [Function("LogAction")]
-    public async Task<HttpResponseData> LogAction(
-        [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "log/action")] HttpRequestData req)
-    {
-        var log = await req.ReadFromJsonAsync<ActionLog>();
-        if (log == null)
-        {
-            return req.CreateResponse(HttpStatusCode.BadRequest);
-        }
-
-        try
-        {
-            await _repository.AddActionLogAsync(log);
-            return req.CreateResponse(HttpStatusCode.OK);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Failed to log action");
-            return req.CreateResponse(HttpStatusCode.InternalServerError);
-        }
-    }
-
-    [Function("LogSearchResult")]
-    public async Task<HttpResponseData> LogSearchResult(
-        [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "log/search_result")] HttpRequestData req)
-    {
-        var log = await req.ReadFromJsonAsync<SearchResultLog>();
-        if (log == null)
-        {
-            return req.CreateResponse(HttpStatusCode.BadRequest);
-        }
-
-        try
-        {
-            await _repository.AddSearchResultLogAsync(log);
-            return req.CreateResponse(HttpStatusCode.OK);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Failed to log search result");
-            return req.CreateResponse(HttpStatusCode.InternalServerError);
-        }
+        Console.Error.WriteLine($"Failed to copy configuration file: {ex.Message}");
     }
 }
+
+builder.Services
+    .AddApplicationInsightsTelemetryWorkerService()
+    .ConfigureFunctionsApplicationInsights();
+
+builder.Services.AddHttpClient();
+
+builder.Services.AddSingleton<ILogRepository>(_ =>
+    new CosmosLogRepository(
+        Environment.GetEnvironmentVariable("CosmosDbConnection") ?? string.Empty,
+        Environment.GetEnvironmentVariable("COSMOS_DATABASE") ?? "astro-db"));
+
+builder.Services.AddSingleton<Application.Services.BirthplaceSearchService>();
+
+builder.Services.AddHostedService<CosmosDbInitializer>();
+
+builder.Build().Run();
