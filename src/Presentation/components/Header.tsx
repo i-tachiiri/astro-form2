@@ -1,7 +1,12 @@
+'use client';
+import { Navbar, NavbarBrand } from '@nextui-org/navbar';
+
 export default function Header() {
   return (
-    <header>
-      <h1>Astro Search</h1>
-    </header>
+    <Navbar className="mb-4">
+      <NavbarBrand>
+        <h1 className="font-bold text-lg">Astro Search</h1>
+      </NavbarBrand>
+    </Navbar>
   );
 }

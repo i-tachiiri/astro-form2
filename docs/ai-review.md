@@ -11,3 +11,6 @@
 - `AccessLog` 送信時の JSON プロパティも実装では `id`, `sessionId`, `accessedAt`
   を要求するが、仕様書では `session_id`, `accessed_at` のみを送信すると記載
   されている
+- UI デザインでは Segoe UI フォントを `next/font` で読み込むと記載されているが、
+  フォントファイルがリポジトリに含まれていないため CSS の `font-family` 指定で
+  代替している
