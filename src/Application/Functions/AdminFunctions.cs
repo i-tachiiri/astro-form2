@@ -97,6 +97,7 @@ public class AdminFunctions
         }
     }
 
+
     private static async Task ClearContainerAsync(Container container)
     {
         var iterator = container.GetItemQueryIterator<dynamic>("SELECT c.id, c.session_id FROM c");
@@ -105,7 +106,16 @@ public class AdminFunctions
             var response = await iterator.ReadNextAsync();
             foreach (var item in response)
             {
-                await container.DeleteItemAsync<dynamic>((string)item.id, new PartitionKey((string)item.session_id));
+                try
+                {
+                    await container.DeleteItemAsync<dynamic>(
+                        (string)item.id,
+                        new PartitionKey((string)item.session_id));
+                }
+                catch (CosmosException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
+                {
+                    // 存在しないだけなら無視
+                }
             }
         }
     }
