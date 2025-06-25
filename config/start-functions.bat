@@ -38,4 +38,5 @@ netstat -ano | findstr :7071 >nul
 if errorlevel 1 goto waitLoop
 
 :: ========= Frontend 起動 =========
+set API_URL=http://localhost:7071
 start "FRONT" cmd /k "cd /d %FRONT_DIR% && npm run dev"
