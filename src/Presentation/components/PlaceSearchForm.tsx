@@ -1,5 +1,5 @@
 'use client';
-import { useState, ChangeEvent } from 'react';
+import { useState, FormEvent } from 'react';
 
 interface SearchResultItem {
   place_id: string;
@@ -9,6 +9,7 @@ interface SearchResultItem {
 
 interface Props {
   onSelected: (detail: PlaceDetails) => void;
+  sessionId: string;
 }
 
 interface PlaceDetails {
@@ -20,13 +21,13 @@ interface PlaceDetails {
   map_url: string;
 }
 
-export default function PlaceSearchForm({ onSelected }: Props) {
+export default function PlaceSearchForm({ onSelected, sessionId }: Props) {
   const [query, setQuery] = useState('');
   const [suggestions, setSuggestions] = useState<SearchResultItem[]>([]);
 
-  async function loadSuggestions(e: ChangeEvent<HTMLInputElement>) {
-    const q = e.target.value;
-    setQuery(q);
+  async function submit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const q = query.trim();
     if (!q) {
       setSuggestions([]);
       return;
@@ -46,6 +47,17 @@ export default function PlaceSearchForm({ onSelected }: Props) {
         setSuggestions([]);
       }
     }
+    const actionLog = {
+      id: crypto.randomUUID(),
+      session_id: sessionId,
+      action_name: 'search',
+      actioned_at: new Date().toISOString(),
+    };
+    fetch('/api/log/action', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(actionLog),
+    }).catch(() => {});
   }
 
   async function select(item: SearchResultItem) {
@@ -63,12 +75,26 @@ export default function PlaceSearchForm({ onSelected }: Props) {
         map_url: detail.map_url ?? detail.mapUrl ?? detail.MapUrl,
       };
       onSelected(normalized);
+      const searchLog = {
+        id: crypto.randomUUID(),
+        session_id: sessionId,
+        place_id: normalized.place_id,
+        query,
+        lat: normalized.lat,
+        lng: normalized.lng,
+        searched_at: new Date().toISOString(),
+      };
+      fetch('/api/log/search_result', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(searchLog),
+      }).catch(() => {});
     }
   }
 
   return (
-    <div>
-      <input value={query} onChange={loadSuggestions} placeholder="Search place" />
+    <form onSubmit={submit}>
+      <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search place" />
       {suggestions.length > 0 && (
         <ul className="suggestions">
           {suggestions.map((s) => (
@@ -76,6 +102,6 @@ export default function PlaceSearchForm({ onSelected }: Props) {
           ))}
         </ul>
       )}
-    </div>
+    </form>
   );
 }

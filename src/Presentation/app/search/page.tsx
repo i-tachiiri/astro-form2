@@ -1,12 +1,12 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import PlaceSearchForm from '../../components/PlaceSearchForm';
 import PlaceSearchResult from '../../components/PlaceSearchResult';
 
 interface AccessLog {
   id: string;
-  sessionId: string;
-  accessedAt: string;
+  session_id: string;
+  accessed_at: string;
 }
 
 interface PlaceDetails {
@@ -22,12 +22,13 @@ const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL ?? '';
 
 export default function SearchPage() {
   const [result, setResult] = useState<PlaceDetails | undefined>();
+  const sessionIdRef = useRef<string>(crypto.randomUUID());
 
   useEffect(() => {
     const log: AccessLog = {
       id: crypto.randomUUID(),
-      sessionId: crypto.randomUUID(),
-      accessedAt: new Date().toISOString(),
+      session_id: sessionIdRef.current,
+      accessed_at: new Date().toISOString(),
     };
     fetch('/api/log/access', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(log) });
     fetch('/api/test-data/initialize', { method: 'POST' }).catch(() => {});
@@ -36,7 +37,7 @@ export default function SearchPage() {
 
   return (
     <div>
-      <PlaceSearchForm onSelected={setResult} />
+      <PlaceSearchForm onSelected={setResult} sessionId={sessionIdRef.current} />
       <PlaceSearchResult result={result} />
     </div>
   );
