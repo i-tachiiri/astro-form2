@@ -18,6 +18,8 @@ interface PlaceDetails {
   map_url: string;
 }
 
+const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL ?? '';
+
 export default function SearchPage() {
   const [result, setResult] = useState<PlaceDetails | undefined>();
 
