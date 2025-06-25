@@ -30,9 +30,9 @@ export default function SearchPage() {
       session_id: sessionIdRef.current,
       accessed_at: new Date().toISOString(),
     };
-    fetch('/api/log/access', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(log) });
-    fetch('/api/test-data/initialize', { method: 'POST' }).catch(() => {});
-    fetch('/api/test-data/seed', { method: 'POST' }).catch(() => {});
+    fetch(`${baseUrl}/api/log/access`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(log) });
+    fetch(`${baseUrl}/api/test-data/initialize`, { method: 'POST' }).catch(() => {});
+    fetch(`${baseUrl}/api/test-data/seed`, { method: 'POST' }).catch(() => {});
   }, []);
 
   return (

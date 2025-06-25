@@ -21,6 +21,8 @@ interface PlaceDetails {
   map_url: string;
 }
 
+const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL ?? '';
+
 export default function PlaceSearchForm({ onSelected, sessionId }: Props) {
   const [query, setQuery] = useState('');
   const [suggestions, setSuggestions] = useState<SearchResultItem[]>([]);
@@ -32,7 +34,7 @@ export default function PlaceSearchForm({ onSelected, sessionId }: Props) {
       setSuggestions([]);
       return;
     }
-    const resp = await fetch(`/api/map?query=${encodeURIComponent(q)}`);
+    const resp = await fetch(`${baseUrl}/api/map?query=${encodeURIComponent(q)}`);
     if (resp.ok) {
       const data = await resp.json();
       const results = data.results ?? data.Results ?? [];
@@ -53,7 +55,7 @@ export default function PlaceSearchForm({ onSelected, sessionId }: Props) {
       action_name: 'search',
       actioned_at: new Date().toISOString(),
     };
-    fetch('/api/log/action', {
+    fetch(`${baseUrl}/api/log/action`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(actionLog),
@@ -63,7 +65,7 @@ export default function PlaceSearchForm({ onSelected, sessionId }: Props) {
   async function select(item: SearchResultItem) {
     setQuery(item.description);
     setSuggestions([]);
-    const resp = await fetch(`/api/map/${item.place_id}`);
+    const resp = await fetch(`${baseUrl}/api/map/${item.place_id}`);
     if (resp.ok) {
       const detail = await resp.json();
       const normalized: PlaceDetails = {
@@ -84,7 +86,7 @@ export default function PlaceSearchForm({ onSelected, sessionId }: Props) {
         lng: normalized.lng,
         searched_at: new Date().toISOString(),
       };
-      fetch('/api/log/search_result', {
+      fetch(`${baseUrl}/api/log/search_result`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(searchLog),
