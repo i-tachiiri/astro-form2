@@ -37,9 +37,9 @@ export default function PlaceSearchForm({ onSelected }: Props) {
       const results = data.results ?? data.Results ?? [];
       if (Array.isArray(results)) {
         const normalized = results.map((r: any) => ({
-          place_id: r.place_id ?? r.placeId,
-          name: r.name,
-          description: r.description,
+          place_id: r.place_id ?? r.placeId ?? r.PlaceId,
+          name: r.name ?? r.Name,
+          description: r.description ?? r.Description,
         }));
         setSuggestions(normalized);
       } else {
@@ -55,12 +55,12 @@ export default function PlaceSearchForm({ onSelected }: Props) {
     if (resp.ok) {
       const detail = await resp.json();
       const normalized: PlaceDetails = {
-        place_id: detail.place_id ?? detail.placeId,
-        name: detail.name,
-        address: detail.address,
-        lat: detail.lat,
-        lng: detail.lng,
-        map_url: detail.map_url ?? detail.mapUrl,
+        place_id: detail.place_id ?? detail.placeId ?? detail.PlaceId,
+        name: detail.name ?? detail.Name,
+        address: detail.address ?? detail.Address,
+        lat: detail.lat ?? detail.Lat,
+        lng: detail.lng ?? detail.Lng,
+        map_url: detail.map_url ?? detail.mapUrl ?? detail.MapUrl,
       };
       onSelected(normalized);
     }
