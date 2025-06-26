@@ -20,3 +20,6 @@
 - **レスポンシブ対応の不足**
   - 仕様のブレークポイントは `480px, 640px, 768px, 1024px, 1280px`【F:specification/ui-design.yaml†L27-L31】。
   - 実装の CSS では `480px` と `768px` のみ定義されている【F:src/Presentation/globals.css†L20-L25】。
+- **検索フォームの未定義挙動**
+  - 仕様では検索候補件数や空結果時のメッセージについて言及がない【F:specification/ui-design.yaml†L77-L81】。
+  - 実装では候補がない場合 `No results found.` と表示され、候補は1件のみだった【F:src/Presentation/components/PlaceSearchForm.tsx†L46-L54】。
