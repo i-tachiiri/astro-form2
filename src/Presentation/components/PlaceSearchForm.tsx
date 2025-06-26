@@ -109,6 +109,7 @@ export default function PlaceSearchForm({ onSelected, sessionId }: Props) {
     <Autocomplete
       aria-label="Search place"
       className="w-full"
+      popoverProps={{ shouldBlockScroll: true }}
       inputValue={query}
       onInputChange={(value) => setQuery(value)}
       onSelectionChange={(key) => {

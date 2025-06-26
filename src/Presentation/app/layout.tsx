@@ -6,7 +6,7 @@ import AccessLogger from '../components/AccessLogger';
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="ja">
-      <body>
+      <body className="min-h-screen overflow-x-hidden">
         <NextUIProvider>
           <AccessLogger />
           {children}
