@@ -110,15 +110,16 @@ export default function PlaceSearchForm({ onSelected, sessionId }: Props) {
       popoverProps={{ shouldBlockScroll: true }}
       listboxProps={{ emptyContent: null, itemClasses: { base: 'cursor-pointer' } }}
       inputValue={query}
+      items={suggestions}
       onInputChange={handleChange}
       onSelectionChange={(key) => {
         const item = suggestions.find((s) => s.place_id === key);
         if (item) select(item);
       }}
     >
-      {suggestions.map((s) => (
-        <AutocompleteItem key={s.place_id}>{s.description}</AutocompleteItem>
-      ))}
+      {(item) => (
+        <AutocompleteItem key={item.place_id}>{item.description}</AutocompleteItem>
+      )}
     </Autocomplete>
   );
 }
