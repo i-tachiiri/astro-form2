@@ -6,5 +6,5 @@ module.exports = {
   theme: {
     extend: {},
   },
-  plugins: [require('@nextui-org/react')()],
+  plugins: [require('@heroui/theme').heroui()],
 };
