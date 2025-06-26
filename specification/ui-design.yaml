@@ -76,9 +76,9 @@ component:
     role: ページタイトル「Astro Search」を表示
   PlaceSearchForm:
   type: Autocomplete
-    description: Google Places Autocomplete → Details 取得
-    props:
-    fullWidth: true         # 横幅いっぱいに広げる
+      description: Google Places Autocomplete → Details 取得
+      props:
+        fullWidth: true         # 横幅いっぱいに広げる
   PlaceSearchResult:
     type: Table               # 例: NextUI <Table>
     description: 取得した場所情報を表示
