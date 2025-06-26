@@ -40,5 +40,9 @@ if errorlevel 1 goto waitLoop
 
 :: ========= Frontend 起動 =========
 set API_URL=http://localhost:7071
-start "FRONT" cmd /k "cd /d %FRONT_DIR% && npm run dev"
+
+:: フロントエンドディレクトリに移動し、npm install → npm run dev を実行
+start "FRONT" cmd /k "cd /d %FRONT_DIR% && npm install && npm run dev"
+
+:: ブラウザで localhost:3000 を開く
 start "" "http://localhost:3000"
