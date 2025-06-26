@@ -1,6 +1,6 @@
 'use client';
 import { useState, useRef } from 'react';
-import { Autocomplete, AutocompleteItem } from '@nextui-org/autocomplete';
+import { Autocomplete, AutocompleteItem } from '@heroui/autocomplete';
 
 interface SearchResultItem {
   place_id: string;

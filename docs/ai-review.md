@@ -11,9 +11,9 @@
 - **`search_result` ログの項目不足**
   - 仕様のデータ設計では `place_name` を保存すると定義【F:specification/data-design.yaml†L57-L68】。
   - 実装の `SearchResultLog` には該当プロパティが存在しない【F:src/Domain/Models/SearchResultLog.cs†L6-L33】。
-- **フォント設定の相違**
+- **フォント設定の相違（解消済み）**
   - 仕様は `Inter` と `Noto Sans JP` を用いる【F:specification/ui-design.yaml†L1-L5】。
-  - 実装のグローバル CSS では `Segoe UI` を指定している【F:src/Presentation/globals.css†L4-L9】。
+  - 実装でも同フォントを利用するよう修正済み【F:src/Presentation/globals.css†L1-L11】。
 - **アイコンとモーションの未実装**
   - 仕様では `@fluentui/react-icons` の利用および `fade`/`slide` のモーションを想定【F:specification/ui-design.yaml†L5-L10】。
   - 実装にはそれらを使用したコードが存在しない。
