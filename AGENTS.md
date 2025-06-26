@@ -3,6 +3,12 @@
   - カバレッジが足りなければテストを実装する
   - フロントエンドは Next.js (React) で構築されているため、UI テストは npm スクリプトを利用する
 ```
+npx tsc --noEmit
+npx next lint
+npx next build
+npx next dev
+
+
 dotnet build astro-form2.sln -c Release
 dotnet format --verify-no-changes
 dotnet test astro-form2.sln --collect:"XPlat Code Coverage"
