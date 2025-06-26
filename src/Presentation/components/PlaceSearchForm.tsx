@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useRef } from 'react';
 import { Autocomplete, AutocompleteItem } from '@nextui-org/autocomplete';
 
 interface SearchResultItem {
@@ -29,15 +29,17 @@ export default function PlaceSearchForm({ onSelected, sessionId }: Props) {
   const [suggestions, setSuggestions] = useState<SearchResultItem[]>([]);
   const timerRef = useRef<NodeJS.Timeout>();
 
-  useEffect(() => {
+  const handleChange = (value: string) => {
+    setQuery(value);
     if (timerRef.current) {
       clearTimeout(timerRef.current);
     }
-    const q = query.trim();
+    const q = value.trim();
     if (!q) {
       setSuggestions([]);
       return;
     }
+    const currentScroll = window.scrollY;
     timerRef.current = setTimeout(async () => {
       const resp = await fetch(`${baseUrl}/api/map?query=${encodeURIComponent(q)}`);
       if (resp.ok) {
@@ -54,6 +56,7 @@ export default function PlaceSearchForm({ onSelected, sessionId }: Props) {
           setSuggestions([]);
         }
       }
+      window.scrollTo({ top: currentScroll });
       const actionLog = {
         id: crypto.randomUUID(),
         session_id: sessionId,
@@ -66,12 +69,7 @@ export default function PlaceSearchForm({ onSelected, sessionId }: Props) {
         body: JSON.stringify(actionLog),
       }).catch(() => {});
     }, 300);
-    return () => {
-      if (timerRef.current) {
-        clearTimeout(timerRef.current);
-      }
-    };
-  }, [query, sessionId]);
+  };
 
   async function select(item: SearchResultItem) {
     setQuery(item.description);
@@ -111,7 +109,7 @@ export default function PlaceSearchForm({ onSelected, sessionId }: Props) {
       className="w-full"
       popoverProps={{ shouldBlockScroll: true }}
       inputValue={query}
-      onInputChange={(value) => setQuery(value)}
+      onInputChange={handleChange}
       onSelectionChange={(key) => {
         const item = suggestions.find((s) => s.place_id === key);
         if (item) select(item);
