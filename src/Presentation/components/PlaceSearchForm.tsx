@@ -46,7 +46,7 @@ export default function PlaceSearchForm({ onSelected, sessionId }: Props) {
         const data = await resp.json();
         const results = data.results ?? data.Results ?? [];
         if (Array.isArray(results)) {
-          const normalized = results.map((r: any) => ({
+          const normalized = results.slice(0, 5).map((r: any) => ({
             place_id: r.place_id ?? r.placeId ?? r.PlaceId,
             name: r.name ?? r.Name,
             description: r.description ?? r.Description,
@@ -108,6 +108,7 @@ export default function PlaceSearchForm({ onSelected, sessionId }: Props) {
       aria-label="Search place"
       className="w-full"
       popoverProps={{ shouldBlockScroll: true }}
+      listboxProps={{ emptyContent: null, itemClasses: { base: 'cursor-pointer' } }}
       inputValue={query}
       onInputChange={handleChange}
       onSelectionChange={(key) => {
