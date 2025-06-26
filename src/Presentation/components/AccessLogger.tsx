@@ -7,18 +7,26 @@ export default function AccessLogger() {
   const sessionIdRef = useRef<string>(crypto.randomUUID());
 
   useEffect(() => {
-    const log = {
-      id: crypto.randomUUID(),
-      session_id: sessionIdRef.current,
-      accessed_at: new Date().toISOString(),
-    };
-    fetch(`${baseUrl}/api/log/access`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(log),
-    });
-    fetch(`${baseUrl}/api/test-data/initialize`, { method: 'POST' }).catch(() => {});
-    fetch(`${baseUrl}/api/test-data/seed`, { method: 'POST' }).catch(() => {});
+    async function sendLogs() {
+      const log = {
+        id: crypto.randomUUID(),
+        session_id: sessionIdRef.current,
+        accessed_at: new Date().toISOString(),
+      };
+      try {
+        await fetch(`${baseUrl}/api/log/access`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(log),
+        });
+      } catch (err) {
+        console.error('failed to log access', err);
+      }
+      fetch(`${baseUrl}/api/test-data/initialize`, { method: 'POST' }).catch(() => {});
+      fetch(`${baseUrl}/api/test-data/seed`, { method: 'POST' }).catch(() => {});
+    }
+
+    sendLogs();
   }, []);
 
   return null;
