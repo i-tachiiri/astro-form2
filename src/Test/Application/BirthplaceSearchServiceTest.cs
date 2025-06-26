@@ -7,6 +7,8 @@ using Domain.Models;
 using Domain.Repositories;
 using Microsoft.Extensions.Logging.Abstractions;
 using Shared;
+using System.Linq;
+using System.Text.Json;
 using Xunit;
 
 class FakeLogRepository : ILogRepository
@@ -143,5 +145,26 @@ public class BirthplaceSearchServiceTest
         var service = new BirthplaceSearchService(client, repo, NullLogger<BirthplaceSearchService>.Instance);
         await service.GetPlaceDetailsAsync("1", "tokyo", string.Empty);
         Assert.Contains("language=ja", requestedUrl);
+    }
+
+    [Fact]
+    public async Task SearchAsync_Returns_Up_To_Five_Results()
+    {
+        var predictions = Enumerable.Range(1, 6).Select(i => new
+        {
+            place_id = i.ToString(),
+            structured_formatting = new { main_text = $"N{i}" },
+            description = $"D{i}"
+        });
+        var json = JsonSerializer.Serialize(new { predictions });
+        var handler = new FakeHttpHandler(_ => new HttpResponseMessage(HttpStatusCode.OK)
+        {
+            Content = new StringContent(json)
+        });
+        var repo = new FakeLogRepository();
+        var client = new HttpClient(handler);
+        var service = new BirthplaceSearchService(client, repo, NullLogger<BirthplaceSearchService>.Instance);
+        var result = await service.SearchAsync("tokyo", string.Empty);
+        Assert.Equal(5, result.Results.Count);
     }
 }
