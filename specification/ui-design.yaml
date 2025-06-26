@@ -80,11 +80,13 @@ component:
   PlaceSearchForm:
     type: Autocomplete        # HeroUI <Autocomplete />
     description: Google Places Autocomplete → Details 取得
+    reference: https://www.heroui.com/docs/components/autocomplete
     result_count: 5
     props:
       fullWidth: true
   PlaceSearchResult:
     type: Table               # HeroUI <Table />
+    reference: https://www.heroui.com/docs/components/table
     description: 取得した場所情報を表示
     content_source: /api/map/{place_id}
     columns: [項目名, 検索結果]
