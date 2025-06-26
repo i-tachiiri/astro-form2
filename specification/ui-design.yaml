@@ -1,8 +1,9 @@
 design:
   color: NextUI のデフォルトテーマ (ライトモード)
-  font\_family: Segoe UI   # next/font で読み込み可
-  font\_scale: 12px-20px   # Fluent Design のスケール
+  font_family: '"Inter", "Noto Sans JP", sans-serif'   # @next/font/google で読み込み可 / Tailwindでも拡張推奨
+  font_scale: 12px–20px   # Fluent Design のスケール
   icon: '@fluentui/react-icons'
+
 motion:
   usage: minimal
   types: \[fade, slide]
@@ -26,11 +27,8 @@ layout:
 # -----------------------------------------------------------
 
 responsive:
-  breakpoints: \[480px, 768px, 1024px]
-  layout:
-  mobile:   1-column      # モバイル
-  tablet:   1.5-column    # サイドナビをドロワー化
-  desktop:  2-pane        # サイドナビ固定 + Main
+  breakpoints: [480px, 640px, 768px, 1024px, 1280px]
+
 
 screen:
   search:
