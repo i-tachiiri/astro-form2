@@ -39,7 +39,7 @@ start "API" cmd /k "cd /d %APP_DIR% && func start"
 
 :: ========= Frontend 並列起動 =========
 set API_URL=http://localhost:7071
-start "FRONT" cmd /k "cd /d %FRONT_DIR% && npm install && npm run dev"
+start "FRONT" cmd /k "cd /d %FRONT_DIR% && npm run dev"
 
 :: ========= 両ポートの起動を待機 =========
 echo Waiting for both ports (3000 and 7071)...
