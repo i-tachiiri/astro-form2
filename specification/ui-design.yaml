@@ -1,91 +1,95 @@
+# =========  HeroUI-friendly spec  =========
+# NextUI 依存部分を HeroUI 用に置き換えています
+# ───────────────────────────────────────────
+
 design:
-  color: NextUI のデフォルトテーマ (ライトモード)
-  font_family: '"Inter", "Noto Sans JP", sans-serif'   # @next/font/google で読み込み可 / Tailwindでも拡張推奨
-  font_scale: 12px–20px   # Fluent Design のスケール
-  icon: '@fluentui/react-icons'
+  color: HeroUI のデフォルトテーマ (ライトモード)     # tailwind-based
+  font_family: '"Inter", "Noto Sans JP", sans-serif'    # Tailwind で拡張推奨
+  font_scale: 12px–20px                                # Fluent Design 相当
+  icon: 'lucide-react'                                  # HeroUI 推奨アイコンセット
 
 motion:
   usage: minimal
-  types: \[fade, slide]
+  types: [fade, slide]
   source: CSS Motion API または framer-motion
+
 accessibility:
   standard: WCAG 2.1 AA
-  keyboard\_navigation: full
+  keyboard_navigation: full
 
 # ---------------- グローバルレイアウト設定 ----------------
-
 layout:
-  centered: true            # 全コンテンツを中央寄せ
-  max\_width:
-  mobile: 95%             # <480px
-  tablet: 75%             # 480–768px
-  desktop: 60%            # ≥768px
-  vertical\_stack: true      # 縦積み（Vertical Stack UI）
-  gap: 1rem                 # 要素間の隙間
-  full\_width\_children: true # 子要素は横幅いっぱい (fullWidth)
-
+  centered: true
+  max_width:
+    mobile: 95%         # <480px
+    tablet: 75%         # 480–768px
+    desktop: 60%        # ≥768px
+  vertical_stack: true
+  gap: 1rem
+  full_width_children: true
 # -----------------------------------------------------------
 
 responsive:
   breakpoints: [480px, 640px, 768px, 1024px, 1280px]
 
-
 screen:
   search:
-  purpose: "場所"を指定して緯度・経度などを検索・表示
-  components: \[Layout, Header, PlaceSearchForm, PlaceSearchResult]
+    purpose: "場所"を指定して緯度・経度などを検索・表示
+    components: [Layout, Header, PlaceSearchForm, PlaceSearchResult]
+
 api:
   /api/map:
     method: GET
-    trigger: onChange (debounce 300ms)
+    trigger: onChange       # debounce 300 ms
     description: Google Places で候補検索
-  /api/map/\[place\_id]:
+  /api/map/{place_id}:
     method: GET
     trigger: onSelect
     description: Place の詳細取得
   /api/log/access:
     method: POST
-    trigger: useEffect (初回レンダリング時)
+    trigger: useEffect      # 初回レンダリング時
     description: アクセスログを記録
-    environment: \[local, development, production]
+    environment: [local, development, production]
   /api/log/action:
     method: POST
     trigger: onSubmit
     description: 検索アクションログ
-    environment: \[local, development, production]
-  /api/log/search\_result:
+    environment: [local, development, production]
+  /api/log/search_result:
     method: POST
     trigger: onSelect
     description: 検索結果ログ
-    environment: \[local, development, production]
+    environment: [local, development, production]
   /api/test-data/initialize:
     method: POST
-    trigger: useEffect (初回レンダリング時)
+    trigger: useEffect
     description: Cosmos DB & コンテナ作成
-    environment: \[local, development]
+    environment: [local, development]
   /api/test-data/seed:
     method: POST
-    trigger: useEffect (初回レンダリング時)
+    trigger: useEffect
     description: テストデータ投入
-    environment: \[local, development]
+    environment: [local, development]
 
 component:
   Layout:
     role: ページ共通の枠 (Header・左右パディング等)
-    Header:
+  Header:
     role: ページタイトル「Astro Search」を表示
   PlaceSearchForm:
-  type: Autocomplete
-      description: Google Places Autocomplete → Details 取得
-      props:
-        fullWidth: true         # 横幅いっぱいに広げる
+    type: Autocomplete        # HeroUI <Autocomplete />
+    description: Google Places Autocomplete → Details 取得
+    result_count: 5
+    props:
+      fullWidth: true
   PlaceSearchResult:
-    type: Table               # 例: NextUI <Table>
+    type: Table               # HeroUI <Table />
     description: 取得した場所情報を表示
-    content\_source: /api/map/[place_id]
-    columns: \[項目名, 検索結果]
-    rows\_example:
-      \- \[住所, '\<full\_address>']
-      \- \[緯度, '<latitude>']
-      \- \[経度, '<longitude>']
-      \- \[GoogleMap, '<url>']
+    content_source: /api/map/{place_id}
+    columns: [項目名, 検索結果]
+    rows_example:
+      - [住所, '<full_address>']
+      - [緯度, '<latitude>']
+      - [経度, '<longitude>']
+      - [GoogleMap, '<url>']
