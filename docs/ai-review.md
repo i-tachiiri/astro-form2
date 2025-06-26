@@ -17,6 +17,3 @@
 - **アイコンとモーションの未実装**
   - 仕様では `@fluentui/react-icons` の利用および `fade`/`slide` のモーションを想定【F:specification/ui-design.yaml†L5-L10】。
   - 実装にはそれらを使用したコードが存在しない。
-- **レスポンシブ対応の不足**
-  - 仕様のブレークポイントは `480px, 640px, 768px, 1024px, 1280px`【F:specification/ui-design.yaml†L27-L31】。
-  - 実装の CSS では `480px` と `768px` のみ定義されている【F:src/Presentation/globals.css†L20-L25】。
