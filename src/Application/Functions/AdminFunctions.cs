@@ -28,7 +28,9 @@ public class AdminFunctions
         try
         {
             var client = new CosmosClient(_connectionString);
-            var database = await client.CreateDatabaseIfNotExistsAsync(_databaseName);
+            var database = await client.CreateDatabaseIfNotExistsAsync(
+                _databaseName,
+                throughput: 1000);
             await database.Database.CreateContainerIfNotExistsAsync("access", "/session_id");
             await database.Database.CreateContainerIfNotExistsAsync("actions", "/session_id");
             await database.Database.CreateContainerIfNotExistsAsync("search_result", "/session_id");
