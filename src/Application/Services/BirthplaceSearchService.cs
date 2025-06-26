@@ -1,4 +1,5 @@
 using System.Text.Json;
+using System.Linq;
 using Domain.Models;
 using Domain.Repositories;
 using Microsoft.Extensions.Logging;
@@ -37,15 +38,14 @@ public class BirthplaceSearchService
         var json = await httpResp.Content.ReadAsStringAsync();
         using var doc = JsonDocument.Parse(json);
         var predictions = doc.RootElement.GetProperty("predictions");
-        var results = new List<SearchResultItem>();
-        foreach (var p in predictions.EnumerateArray())
-        {
-            var item = new SearchResultItem(
+        var results = predictions
+            .EnumerateArray()
+            .Take(5)
+            .Select(p => new SearchResultItem(
                 p.GetProperty("place_id").GetString() ?? string.Empty,
                 p.GetProperty("structured_formatting").GetProperty("main_text").GetString() ?? string.Empty,
-                p.GetProperty("description").GetString() ?? string.Empty);
-            results.Add(item);
-        }
+                p.GetProperty("description").GetString() ?? string.Empty))
+            .ToList();
         return new SearchResults(results);
     }
 
