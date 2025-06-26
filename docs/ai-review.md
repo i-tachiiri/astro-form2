@@ -20,6 +20,3 @@
 - **レスポンシブ対応の不足**
   - 仕様のブレークポイントは `480px, 640px, 768px, 1024px, 1280px`【F:specification/ui-design.yaml†L27-L31】。
   - 実装の CSS では `480px` と `768px` のみ定義されている【F:src/Presentation/globals.css†L20-L25】。
-- **Cosmos DB のスループット設定**
-  - 仕様では RU/s を 1000 とし自動スケーリングなし【F:specification/data-design.yaml†L1-L15】。
-  - 初期化処理ではスループットの指定がなく、RU/s の設定を行っていない【F:src/Infrastructure/CosmosDbInitializer.cs†L20-L29】。

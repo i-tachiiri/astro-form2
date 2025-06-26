@@ -21,7 +21,10 @@ public class CosmosDbInitializer : IHostedService
         if (string.IsNullOrEmpty(_connectionString)) return;
 
         var client = new CosmosClient(_connectionString);
-        var dbResponse = await client.CreateDatabaseIfNotExistsAsync(_databaseName, cancellationToken: cancellationToken);
+        var dbResponse = await client.CreateDatabaseIfNotExistsAsync(
+            _databaseName,
+            throughput: 1000,
+            cancellationToken: cancellationToken);
         var database = dbResponse.Database;
 
         await database.CreateContainerIfNotExistsAsync("access", "/session_id", cancellationToken: cancellationToken);
